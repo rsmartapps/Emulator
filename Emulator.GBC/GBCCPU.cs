@@ -216,23 +216,23 @@ public class GBCCPU : CPU
             case 0xBF: CP(Registers.A, Registers.A); break; // CP A . 1 4 . Z 1 H C 
             case 0xC0: RET(!Registers.SubstractFlag); break; // RET NZ . 1 20/8 . - - - -
             case 0xC1: Registers.BC.Word = POP(); break; // POP BC . 1 12 .
-            case 0xC2: break;
-            case 0xC3: break;
-            case 0xC4: break;
-            case 0xC5: break;
-            case 0xC6: break;
-            case 0xC7: break;
-            case 0xC8: break;
-            case 0xC9: break;
-            case 0xCA: break;
-            case 0xCB: break;
-            case 0xCC: break;
-            case 0xCD: break;
-            case 0xCE: break;
-            case 0xCF: break;
-            case 0xD0: break;
-            case 0xD1: break;
-            case 0xD2: break;
+            case 0xC2: JP(!Registers.ZeroFlag); break; // JP NZ,a16 . 3 16/12 . - - - -
+            case 0xC3: JP(true); break; // JP a16 . 3 16 . - - - -
+            case 0xC4: CALL(!Registers.ZeroFlag); break;
+            case 0xC5: PUSH(Registers.BC.High, Registers.BC.Low); break; // PUSH BC . 1 16 . - - - -
+            case 0xC6: Registers.A = ADD(Registers.A, LD8(Registers.PC.Word)); Registers.PC++; break; // ADD A,d8 . 2 8 . Z 0 H C
+            case 0xC7: RST(0x0);  break; // RST 00H . 1 16 . - - - -
+            case 0xC8: RET(Registers.ZeroFlag); break; // RET Z . 1 20/8 . - - - -
+            case 0xC9: RET(true); break; // RET . 1 16 . - - - -
+            case 0xCA: JP(Registers.ZeroFlag); break; // JP Z,a16 . 3 16/12 . - - - -
+            case 0xCB: Console.WriteLine($"Pending to implement PREFIX CB - {LD8(Registers.PC.Word).ToString("X")}"); break; // PREFIX CB . 1 4 . - - - -
+            case 0xCC: CALL(Registers.ZeroFlag); break; // CALL Z,a16 3 24/12 . - - - -
+            case 0xCD: CALL(true); break; // CALL . 3 24 . - - - -
+            case 0xCE: Registers.A = ADD(Registers.A,LD8(Registers.PC.Word)); Registers.PC++; break; // ADD A,d8 . 2 8 . Z 0 H C
+            case 0xCF: RST(0x8); break; // RST 08H . 1 16 . - - - -
+            case 0xD0: RET(!Registers.ZeroFlag); break; // RET NC . 1 20/8 . - - - -
+            case 0xD1: Registers.BC.Word = POP(); break; // POP BC . 1 12 . - - - -
+            case 0xD2: JP(!Registers.ZeroFlag); break; // JP NZ,a16 . 3 16/12 . - - - -
             case 0xD3: break;
             case 0xD4: break;
             case 0xD5: break;

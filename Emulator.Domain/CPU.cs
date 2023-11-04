@@ -137,14 +137,17 @@ public class CPU
             UpdateHaltFlag(v1, v2);
         return (byte)result;
     }
+
     internal virtual byte ADD(byte v1, byte v2)
     {
         var sumValue = (ushort)(v1 + v2);
         Registers.SubstractFlag = false;
+        UpdateZeroFlag(sumValue);
         UpdateHaltFlag(v1, v2);
         UpdateCarryFlag((byte)sumValue);
         return (byte)sumValue;
     }
+
     internal virtual ushort ADD(ushort v1, ushort v2)
     {
         var sumValue = (v1 + v2);
@@ -273,9 +276,16 @@ public class CPU
     /// Jump to address
     /// </summary>
     /// <param name="address"></param>
-    internal virtual void JP(ushort address)
+    internal virtual void JP(bool flag)
     {
-        Registers.PC.Word = address;
+        if (flag)
+        {
+            JUMP();
+        }
+        else
+        {
+            Registers.PC += 2;
+        }
     }
     internal virtual void JUMP()
     {
@@ -373,6 +383,18 @@ public class CPU
         UpdateCarryFlagMost(value);
         return (byte)((value << 1) | (oldFlag ? 1 : 0));
     }
+    internal virtual void CALL(bool flag)
+    {
+        if(flag)
+        {
+            CALL();
+        }
+        else
+        {
+            Registers.PC += 2;
+        }
+    }
+
     internal virtual void CALL()
     {
         var low = Hardware.Memory.Read(Registers.PC.Word);
@@ -398,10 +420,10 @@ public class CPU
     }
     internal virtual void SP(Register address)
     {
-        Registers.SP++;
-        Hardware.Memory.Write(Registers.SP, address.Low);
-        Registers.SP++;
+        Registers.SP--;
         Hardware.Memory.Write(Registers.SP, address.High);
+        Registers.SP--;
+        Hardware.Memory.Write(Registers.SP, address.Low);
     }
 
     internal virtual void HALT()
