@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.GBC", "Emulator.GBC\Emulator.GBC.csproj", "{E2629797-9549-40E2-9269-10614A6E7EEC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Domain", "Emulator.Domain\Emulator.Domain.csproj", "{04CBD63A-0D02-4F40-AE42-F9FD4371B050}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Player", "Emulator.Player\Emulator.Player.csproj", "{EDE018ED-3CFA-4510-AC8D-F8E00B7309AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROMs", "ROMs", "{3465EF3F-979A-4BEC-915E-436BE7EB1AB3}"
+	ProjectSection(SolutionItems) = preProject
+		ROMs\Galaga - Destination Earth.gbc = ROMs\Galaga - Destination Earth.gbc
+		ROMs\Pokemon - Crystal.gbc = ROMs\Pokemon - Crystal.gbc
+		ROMs\Pokemon - Yellow.gbc = ROMs\Pokemon - Yellow.gbc
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Development", "Emulator.Development\Emulator.Development.csproj", "{7ECB4C7C-65C9-43C6-9071-7D69A8AF3A83}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2629797-9549-40E2-9269-10614A6E7EEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2629797-9549-40E2-9269-10614A6E7EEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2629797-9549-40E2-9269-10614A6E7EEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2629797-9549-40E2-9269-10614A6E7EEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04CBD63A-0D02-4F40-AE42-F9FD4371B050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04CBD63A-0D02-4F40-AE42-F9FD4371B050}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04CBD63A-0D02-4F40-AE42-F9FD4371B050}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04CBD63A-0D02-4F40-AE42-F9FD4371B050}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE018ED-3CFA-4510-AC8D-F8E00B7309AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE018ED-3CFA-4510-AC8D-F8E00B7309AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE018ED-3CFA-4510-AC8D-F8E00B7309AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE018ED-3CFA-4510-AC8D-F8E00B7309AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ECB4C7C-65C9-43C6-9071-7D69A8AF3A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ECB4C7C-65C9-43C6-9071-7D69A8AF3A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ECB4C7C-65C9-43C6-9071-7D69A8AF3A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ECB4C7C-65C9-43C6-9071-7D69A8AF3A83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8A663038-6047-4365-85D5-8E8A99521DB4}
+	EndGlobalSection
+EndGlobal
