@@ -233,51 +233,51 @@ public class GBCCPU : CPU
             case 0xD0: RET(!Registers.ZeroFlag); break; // RET NC . 1 20/8 . - - - -
             case 0xD1: Registers.BC.Word = POP(); break; // POP BC . 1 12 . - - - -
             case 0xD2: JP(!Registers.ZeroFlag); break; // JP NZ,a16 . 3 16/12 . - - - -
-            case 0xD3: break;
-            case 0xD4: break;
-            case 0xD5: break;
-            case 0xD6: break;
-            case 0xD7: break;
-            case 0xD8: break;
-            case 0xD9: break;
-            case 0xDA: break;
-            case 0xDB: break;
-            case 0xDC: break;
-            case 0xDD: break;
-            case 0xDE: break;
-            case 0xDF: break;
-            case 0xE0: break;
-            case 0xE1: break;
-            case 0xE2: break;
-            case 0xE3: break;
-            case 0xE4: break;
-            case 0xE5: break;
-            case 0xE6: break;
-            case 0xE7: break;
-            case 0xE8: break;
-            case 0xE9: break;
-            case 0xEA: break;
-            case 0xEB: break;
-            case 0xEC: break;
-            case 0xED: break;
-            case 0xEE: break;
-            case 0xEF: break;
-            case 0xF0: break;
-            case 0xF1: break;
-            case 0xF2: break;
-            case 0xF3: break;
-            case 0xF4: break;
-            case 0xF5: break;
-            case 0xF6: break;
-            case 0xF7: break;
-            case 0xF8: break;
-            case 0xF9: break;
-            case 0xFA: break;
-            case 0xFB: break;
-            case 0xFC: break;
-            case 0xFD: break;
-            case 0xFE: break;
-            case 0xFF: break;
+            //case 0xD3: break;
+            case 0xD4: CALL(!Registers.CarryFlag); break; // CALL NC,a16 . 3 24/12 - - - -
+            case 0xD5: PUSH(Registers.DE.High, Registers.DE.Low); break; // PUSH DE . 1 16 . - - - -
+            case 0xD6: Registers.A = SUB(Registers.A, LD8(Registers.PC.Word)); Registers.PC++; break; // SUB d8 . 2 8 . Z 1 H C
+            case 0xD7: RST(0x10); break; // RST 10H . 1 16 . - - - -
+            case 0xD8: RET(Registers.CarryFlag); break; // RET Z . 1 20/8 . - - - -
+            case 0xD9: RET(true); IME = true; break; // RETI . 1 16 . - - - -
+            case 0xDA: JP(Registers.CarryFlag); break; // JP C,a16 . 3 16/12 . - - - -
+            //case 0xDB: break;
+            case 0xDC: CALL(Registers.CarryFlag); break; // CALL C,a16 . 3 24/12 . - - - -
+            //case 0xDD: break; 
+            case 0xDE: Registers.A = SBC8(Registers.A, LD8(Registers.PC.Word)); Registers.PC++; break; // SBC A,d8 . 2 8 . Z 1 H C
+            case 0xDF: RST(0x18); break; // RST 18H . 1 16 . - - - -
+            case 0xE0: LDHA8(Registers.PC.Word, Registers.A); Registers.PC++;  break; // LDH (a8),A . 2 12 . - - - -
+            case 0xE1: Registers.HL.Word = POP(); break; // POP HL . 1 12 . - - - -
+            case 0xE2: LDH8(Registers.C, Registers.A); break; // LD (C),A . 2 8 . - - - -
+            //case 0xE3: break;
+            //case 0xE4: break;
+            case 0xE5: PUSH(Registers.HL.High, Registers.HL.Low); break; // PUSH HL . 1 16 . - - - -
+            case 0xE6: Registers.A = AND(Registers.A, LD8(Registers.PC.Word)); Registers.PC++; break; // AND d8 . 2 8 . Z 0 1 0
+            case 0xE7: RST(0x20); break; // RST 20H .. 1 16 . - - - -
+            case 0xE8: Registers.SP = ADDr8(Registers.SP); break; // ADD SP,r8 . 2 16 . 0 0 H C
+            case 0xE9: Registers.PC = Registers.HL; break; // JP (HL) . 1 4 . - - - -
+            case 0xEA: LD16(Registers.A); break; // LD (a16),A . 3 16 . - - - -
+            //case 0xEB: break;
+            //case 0xEC: break;
+            //case 0xED: break;
+            case 0xEE: XOR(Registers.A, LD8(Registers.PC.Word)); Registers.PC++; break; // XOR d8 . 2 8 . Z 0 0 0
+            case 0xEF: RST(0x28); break; // RST 28H . 1 16 . - - - -
+            case 0xF0: Registers.A = LDHP8(Registers.PC.Word); Registers.PC++; break; // LDH A,(a8) . 2 12 . - - - -
+            case 0xF1: Registers.AF.Word = POP(); break; // POP AF . 1 12 . Z N H C
+            case 0xF2: Registers.A = LDHA8(Registers.C); break; // LD A,(C) . 2 8 . - - - -
+            case 0xF3: IME = false; break; // DI . 1 4 . - - - -
+            //case 0xF4: break;
+            case 0xF5: PUSH(Registers.AF.High, Registers.AF.Low); break; // PUSH AF . 1 16 . - - - -
+            case 0xF6: Registers.A = OR(Registers.A, LD8(Registers.PC.Word)); Registers.PC++; break; // OR d8 . 2 8 . Z 0 0 0
+            case 0xF7: RST(0x30); break; // RST 30H . 1 16 . - - - -
+            case 0xF8: Registers.HL.Word = ADDr8(Registers.SP); break; //LD HL,SP+R8 . 2 12 .0 0 H C
+            case 0xF9: Registers.SP = Registers.HL.Word; break; // LD SP,HL . 1 8 . - - - -
+            case 0xFA: Registers.A = LDP16(); break; // LD A,(a16) . 3 16 . - - - -
+            case 0xFB: IMEEnabler = true; break; // IE . 1 8 . - - - -
+            //case 0xFC: break;
+            //case 0xFD: break;
+            case 0xFE: CP(Registers.A, LD8(Registers.PC.Word)); Registers.PC++; break; // CP d8 . 2 8 . Z 1 H C
+            case 0xFF: RST(0x38); break; // RST 38H . 1 16 . - - - -
             default: Console.WriteLine($"PC {Registers.PC.Word} OPCode {opCode.ToString("X")} not implemented"); break;
         }
     }

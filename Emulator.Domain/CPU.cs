@@ -95,7 +95,10 @@ public class CPU
     }
     internal virtual byte LD8(ushort address) => Hardware.Memory.Read(address);
     internal virtual void LD8(ushort address, byte value) => Hardware.Memory.Write(Hardware.Memory.Read(address), value);
-    internal virtual byte LDHA8() => Hardware.Memory.Read((ushort)(0xFF00+Hardware.Memory.Read(Registers.PC.Word)));
+    internal virtual byte LDHP8(ushort address) => Hardware.Memory.Read((ushort)(0xFF00 + Hardware.Memory.Read(address)));
+    internal virtual void LDH8(ushort address, byte value) => Hardware.Memory.Write((ushort)(0xFF00 + Hardware.Memory.Read(address)), value);
+    internal virtual void LDHA8(ushort address, byte value) => Hardware.Memory.Write((ushort)(0xFF00 + address), value);
+    internal virtual byte LDHA8(ushort address) => Hardware.Memory.Read((ushort)(0xFF00 + address));
     internal virtual ushort LD16()
     {
         var low = Hardware.Memory.Read(Registers.PC.Word);
@@ -103,6 +106,18 @@ public class CPU
         var high = Hardware.Memory.Read(Registers.PC.Word);
         Registers.PC++;
         return (ushort)((high << 8) | low);
+    }    
+    internal virtual byte LDP16()
+    {
+        var low = Hardware.Memory.Read(Registers.PC.Word);
+        Registers.PC++;
+        var high = Hardware.Memory.Read(Registers.PC.Word);
+        Registers.PC++;
+        return Hardware.Memory.Read((ushort)((high << 8) | low));
+    }
+    internal virtual void LD16(byte value)
+    {
+        Hardware.Memory.Write(LD16(), value);
     }
     internal virtual void LD16(ushort value)
     {
@@ -117,14 +132,20 @@ public class CPU
     {
         Hardware.Memory.Write(address, value);
     }
-    /// <summary>
-    /// Reads from memory and writes to the memory readed with offset of 0xFF00 the value
-    /// </summary>
-    /// <param name="value"></param>
-    internal virtual void LDHA8(byte value) => Hardware.Memory.Write((ushort)(0xFF00+Hardware.Memory.Read(Registers.PC.Word)), value);
     #endregion
 
     #region Addings
+
+    internal virtual ushort ADDr8(ushort v1)
+    {
+        var v2 = Hardware.Memory.Read(Registers.PC.Word);
+        Registers.ZeroFlag = false;
+        Registers.SubstractFlag = false;
+        UpdateHaltFlag((byte)v1, v2);
+        UpdateCarryFlag((byte)v1 + v2);
+        return (ushort)(v1 + (sbyte)v2);
+    }
+
     internal virtual byte ADDC(byte v1, byte v2)
     {
         var carry = Registers.CarryFlag ? 1 : 0;
