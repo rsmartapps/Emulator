@@ -7,7 +7,7 @@ using System.Text;
 namespace Emulator.Domain;
 
 [DebuggerDisplay("{INFO}")]
-public class CPU
+public class CPU : IFlags
 {
     public  Registers Registers = new Registers();
 
@@ -79,8 +79,51 @@ public class CPU
     }
     internal virtual void CP(byte v1, byte v2)
     {
-        SBC8(v1, v2);
+        var result = v1 - v2;
+        UpdateZeroFlag(result);
+        Registers.SubstractFlag = true;
+        UpdateHaltFlagSub(v1, v2);
+        UpdateCarryFlag(result);
     }
+    internal virtual byte RLC(byte v)
+    {
+        byte result = (byte)((v << 1) | (v >> 7));
+        UpdateZeroFlag(result);
+        Registers.SubstractFlag = false;
+        Registers.HaltFlag = false;
+        UpdateCarryFlagMost(v);
+        return result;
+    }
+    internal virtual byte RRC(byte v)
+    {
+        byte result = (byte)((v >> 1) | (v << 7));
+        UpdateZeroFlag(result);
+        Registers.SubstractFlag = false;
+        Registers.HaltFlag = false;
+        UpdateCarryFlagLeast(v);
+        return result;
+    }
+    internal virtual byte RL(byte v)
+    {
+        var prevC = Registers.CarryFlag;
+        byte result = (byte)((v << 1) | (prevC ? 1 : 0));
+        UpdateZeroFlag(result);
+        Registers.SubstractFlag = false;
+        Registers.HaltFlag = false;
+        UpdateCarryFlagMost(v);
+        return result;
+    }
+    internal virtual byte RR(byte v)
+    {
+        var prevC = Registers.CarryFlag;
+        byte result = (byte)((v >> 1) | (prevC ? 1 : 0));
+        UpdateZeroFlag(result);
+        Registers.SubstractFlag = false;
+        Registers.HaltFlag = false;
+        UpdateCarryFlagLeast(v);
+        return result;
+    }
+
     #endregion
 
     #region Move commands
@@ -94,7 +137,8 @@ public class CPU
         return Hardware.Memory.Read(Hardware.Memory.Read(address));
     }
     internal virtual byte LD8(ushort address) => Hardware.Memory.Read(address);
-    internal virtual void LD8(ushort address, byte value) => Hardware.Memory.Write(Hardware.Memory.Read(address), value);
+    internal virtual void LD8(ushort address, byte value) => Hardware.Memory.Write(address, value);
+    internal virtual void LDP8(ushort address, byte value) => Hardware.Memory.Write(LD8(address), value);
     internal virtual byte LDHP8(ushort address) => Hardware.Memory.Read((ushort)(0xFF00 + Hardware.Memory.Read(address)));
     internal virtual void LDH8(ushort address, byte value) => Hardware.Memory.Write((ushort)(0xFF00 + Hardware.Memory.Read(address)), value);
     internal virtual void LDHA8(ushort address, byte value) => Hardware.Memory.Write((ushort)(0xFF00 + address), value);
@@ -258,23 +302,15 @@ public class CPU
     #endregion
 
     #region Jumps
-    internal virtual void JRr8(bool flag)
-    {
-        if (!flag)
-        {
-            sbyte value = (sbyte)(Hardware.Memory.Read(Registers.PC.Word));
-            Registers.PC.Word = (ushort)(Registers.PC.Word - 1 + value); 
-        }
-    }
     internal virtual void RET(bool flag = false)
     {
-        if(flag)
+        // TODO: Update Cycles
+        if (flag)
         {
             Registers.PC.Word = POP();
         }
         else
         {
-            // TODO: Update Cycles
         }
     }
     /// <summary>
@@ -284,14 +320,12 @@ public class CPU
     /// <exception cref="NotImplementedException"></exception>
     internal virtual void JR(bool flag)
     {
+        // TODO: Add Cycles
         if (flag)
         {
             Registers.PC += (sbyte)Hardware.Memory.Read(Registers.PC.Word);
         }
-        else
-        {
-            Registers.PC++;
-        }
+        Registers.PC++;
     }
     /// <summary>
     /// Jump to address
@@ -368,7 +402,7 @@ public class CPU
         Registers.HaltFlag = false;
         return value;
     }
-    internal virtual void STOP() => throw new NotImplementedException();
+    internal virtual void STOP() => throw new NotImplementedException("STOP");
     internal virtual byte RRA(byte value)
     {
         Registers.ZeroFlag = false;
@@ -422,7 +456,7 @@ public class CPU
         Registers.PC++;
         var high = Hardware.Memory.Read(Registers.PC.Word);
         Registers.PC++;
-        SP(Registers.PC);
+        PUSH(Registers.PC.High, Registers.PC.Low);
         Registers.PC.Word = (ushort)((high << 8) | low);
     }
     internal virtual void CPL()
@@ -438,24 +472,6 @@ public class CPU
     {
         PUSH(Registers.PC.High, Registers.PC.Low);
         Registers.PC.Word = OPCode;
-    }
-    internal virtual void SP(Register address)
-    {
-        Registers.SP--;
-        Hardware.Memory.Write(Registers.SP, address.High);
-        Registers.SP--;
-        Hardware.Memory.Write(Registers.SP, address.Low);
-    }
-
-    internal virtual void HALT()
-    {
-        if (!Registers.Interrupt)
-        {
-            if (Hardware.Memory.IE)
-            {
-
-            }
-        }
     }
     #endregion
 
@@ -475,45 +491,53 @@ public class CPU
     /// (byte)value == 0
     /// </summary>
     /// <param name="value"></param>
-    internal virtual void UpdateZeroFlag(int value) => Registers.ZeroFlag = (byte)value == 0;
+    public void UpdateZeroFlag(int value) => Registers.ZeroFlag = (byte)value == 0;
 
     /// <summary>
     /// ((v1 & 0xF) + (v2 & 0xF)) >= 0xF
     /// </summary>
     /// <param name="v1"></param>
     /// <param name="v2"></param>
-    internal virtual void UpdateHaltFlagCarry(byte v1, byte v2) => Registers.HaltFlag = ((v1 & 0xF) + (v2 & 0xF)) >= 0xF;
+    public virtual void UpdateHaltFlagCarry(byte v1, byte v2) => Registers.HaltFlag = ((v1 & 0xF) + (v2 & 0xF)) >= 0xF;
 
     /// <summary>
     /// ((w1 & 0xFFF) + (w2 & 0xFFF)) > 0xFFF
     /// </summary>
     /// <param name="value"></param>
-    internal virtual void UpdateHaltFlag(ushort w1, ushort w2) => Registers.HaltFlag = ((w1 & 0xFFF) + (w2 & 0xFFF)) > 0xFFF;
+    public virtual void UpdateHaltFlag(ushort w1, ushort w2) => Registers.HaltFlag = ((w1 & 0xFFF) + (w2 & 0xFFF)) > 0xFFF;
     /// <summary>
     /// ((v1 & 0xF) + (v2 & 0xF)) > 0xF
     /// </summary>
     /// <param name="v1"></param>
     /// <param name="v2"></param>
-    internal virtual void UpdateHaltFlag(byte v1, sbyte v2) => Registers.HaltFlag = ((v1 & 0xF) + (v2 & 0xF)) > 0xF;
+    public virtual void UpdateHaltFlag(byte v1, sbyte v2) => Registers.HaltFlag = ((v1 & 0xF) + (v2 & 0xF)) > 0xF;
 
     /// <summary>
     /// (v1 & 0xF) < (v2 & 0xF)
     /// </summary>
     /// <param name="sumValue"></param>
-    internal virtual void UpdateHaltFlagSub(byte v1, byte v2) => Registers.HaltFlag = (v1 & 0xF) < (v2 & 0xF);
+    public virtual void UpdateHaltFlagSub(byte v1, byte v2) => Registers.HaltFlag = (v1 & 0xF) < (v2 & 0xF);
     /// <summary>
     /// </summary>(v1 & 0xF) < ((v2 & 0xF) + (Registers.CarryFlag ? 1 : 0))
     /// <param name="v1"></param>
     /// <param name="v2"></param>
-    internal virtual void UpdateHaltFlagSubCarry(byte v1, byte v2) => Registers.HaltFlag = (v1 & 0xF) < ((v2 & 0xF) + (Registers.CarryFlag ? 1 : 0));
+    public virtual void UpdateHaltFlagSubCarry(byte v1, byte v2) => Registers.HaltFlag = (v1 & 0xF) < ((v2 & 0xF) + (Registers.CarryFlag ? 1 : 0));
 
     /// <summary>
     /// (v >> 8) != 0
     /// </summary>
     /// <param name="v"></param>
-    internal virtual void UpdateCarryFlag(int v) => Registers.CarryFlag = (v >> 8) != 0;
-    internal virtual void UpdateCarryFlagLeast(byte v) => Registers.CarryFlag = (v & 0x1) != 0;
-    internal virtual void UpdateCarryFlagMost(byte v) => Registers.CarryFlag = (v & 0x80) != 0;
+    public virtual void UpdateCarryFlag(int v) => Registers.CarryFlag = (v >> 8) != 0;
+    /// <summary>
+    /// (v & 0x1) != 0
+    /// </summary>
+    /// <param name="v"></param>
+    public virtual void UpdateCarryFlagLeast(byte v) => Registers.CarryFlag = (v & 0x1) != 0;
+    /// <summary>
+    /// (v & 0x80) != 0
+    /// </summary>
+    /// <param name="v"></param>
+    public virtual void UpdateCarryFlagMost(byte v) => Registers.CarryFlag = (v & 0x80) != 0;
     #endregion
 
     #region object overrides

@@ -35,7 +35,14 @@ public class GBCMemory : MachineMemory
     /// <summary>
     /// https://gbdev.io/pandocs/Interrupts.html#interrupts
     /// </summary>
-    const ushort INTERRUPT = 0xFFFF;
+    //Interrupt IO Flags
+    //Bit 0: V-Blank Interrupt Enable(INT 40h)  (1=Enable)
+    //Bit 1: LCD STAT Interrupt Enable(INT 48h)  (1=Enable)
+    //Bit 2: Timer Interrupt Enable(INT 50h)  (1=Enable)
+    //Bit 3: Serial Interrupt Enable(INT 58h)  (1=Enable)
+    //Bit 4: Joypad Interrupt Enable(INT 60h)  (1=Enable)
+    public byte IE { get { return Read(0xFFFF); } set { Write(0xFFFF, value); } }//FFFF - IE - Interrupt Enable (R/W)
+    public byte IF { get { return Read(0xFF0F); } set { Write(0xFF0F, value); } }//FF0F - IF - Interrupt Flag (R/W)
     IMBC MBC;
     /// <summary>
     /// Addresses: 0000h - 7FFFh
@@ -96,8 +103,6 @@ public class GBCMemory : MachineMemory
                 case < IO_HIGH:
                     return RAM[address];
                 case < ZPRAM_HIGH:
-                    return RAM[address];
-                case INTERRUPT:
                     return RAM[address];
                 default:
                     Console.WriteLine($"Out of index {address.ToString("X")}");

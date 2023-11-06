@@ -2,18 +2,49 @@
 using Emulator.Domain;
 using Emulator.GBC;
 
+
 Console.WriteLine("Hello, World!");
-IMachine Machine = new GBCMachine();
-
-try
+async Task Tests()
 {
+    try
+    {
+        IMachine Machine = new GBCMachine();
+        foreach (var file in Directory.EnumerateFiles("B:\\Dev\\Emulators\\ROMs\\tests\\CPU\\individual"))
+        {
+            Console.WriteLine($"Executing {file}");
+            try
+            {
 
-    await Machine.LoadGame("B:\\Dev\\Emulators\\ROMs\\Tennis.gb");
+                await Machine.LoadGame(file);
 
-    Machine.ExecuteGame();
+                Machine.ExecuteGame();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
 }
-catch (Exception ex)
+
+async Task RunGame()
 {
-    Console.WriteLine(ex.Message);
+    try
+    {
+
+        IMachine Machine = new GBCMachine();
+        await Machine.LoadGame("B:\\Dev\\Emulators\\ROMs\\Tennis.gb");
+
+        Machine.ExecuteGame();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
 }
+await RunGame();
 

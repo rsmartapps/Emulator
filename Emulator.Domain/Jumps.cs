@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Emulator.Domain
 {
-    public class Flags
+    public class Jumps
     {
     }
 }

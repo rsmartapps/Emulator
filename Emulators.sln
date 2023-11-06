@@ -14,9 +14,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROMs", "ROMs", "{3465EF3F-9
 		ROMs\Galaga - Destination Earth.gbc = ROMs\Galaga - Destination Earth.gbc
 		ROMs\Pokemon - Crystal.gbc = ROMs\Pokemon - Crystal.gbc
 		ROMs\Pokemon - Yellow.gbc = ROMs\Pokemon - Yellow.gbc
+		ROMs\Tennis.gb = ROMs\Tennis.gb
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Development", "Emulator.Development\Emulator.Development.csproj", "{7ECB4C7C-65C9-43C6-9071-7D69A8AF3A83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestROMs", "TestROMs", "{36E161BF-B951-4E2D-B89A-85CE4C97BD1B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CPU", "CPU", "{D6910A0C-D37C-4917-9224-078FB1857FE1}"
+	ProjectSection(SolutionItems) = preProject
+		ROMs\cpu_instrs.gb = ROMs\cpu_instrs.gb
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Individual", "Individual", "{3D251104-33C1-483C-8913-9E2AFE989D2A}"
+	ProjectSection(SolutionItems) = preProject
+		ROMs\individual\01-special.gb = ROMs\individual\01-special.gb
+		ROMs\individual\02-interrupts.gb = ROMs\individual\02-interrupts.gb
+		ROMs\individual\03-op sp,hl.gb = ROMs\individual\03-op sp,hl.gb
+		ROMs\individual\04-op r,imm.gb = ROMs\individual\04-op r,imm.gb
+		ROMs\individual\05-op rp.gb = ROMs\individual\05-op rp.gb
+		ROMs\individual\06-ld r,r.gb = ROMs\individual\06-ld r,r.gb
+		ROMs\individual\07-jr,jp,call,ret,rst.gb = ROMs\individual\07-jr,jp,call,ret,rst.gb
+		ROMs\individual\08-misc instrs.gb = ROMs\individual\08-misc instrs.gb
+		ROMs\individual\09-op r,r.gb = ROMs\individual\09-op r,r.gb
+		ROMs\individual\10-bit ops.gb = ROMs\individual\10-bit ops.gb
+		ROMs\individual\11-op a,(hl).gb = ROMs\individual\11-op a,(hl).gb
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +66,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{36E161BF-B951-4E2D-B89A-85CE4C97BD1B} = {3465EF3F-979A-4BEC-915E-436BE7EB1AB3}
+		{D6910A0C-D37C-4917-9224-078FB1857FE1} = {36E161BF-B951-4E2D-B89A-85CE4C97BD1B}
+		{3D251104-33C1-483C-8913-9E2AFE989D2A} = {D6910A0C-D37C-4917-9224-078FB1857FE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A663038-6047-4365-85D5-8E8A99521DB4}

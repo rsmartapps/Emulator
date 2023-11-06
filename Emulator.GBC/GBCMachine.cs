@@ -10,11 +10,10 @@ namespace Emulator.GBC
 {
     public class GBCMachine : IMachine
     {
-
         public GBCMachine()
         {
-            Hardware.CPU = new GBCCPU();
             Hardware.Memory = new GBCMemory();
+            Hardware.CPU = new GBCCPU();
         }
 
         public void ExecuteGame()

@@ -55,7 +55,7 @@ namespace Emulator.Domain
         public Register DE { get; set; } = new();
         public Register HL { get; set; } = new();
 
-        public ushort SP { get; set; } = new();
+        public ushort SP { get; set; }
         public Register PC { get; set; } = new ();
 
         public override string ToString()

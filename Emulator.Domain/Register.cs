@@ -82,7 +82,7 @@ namespace Emulator.Domain
 
         public override string ToString()
         {
-            return Word.ToString("X");
+            return $"{High.ToString("X")} {Low.ToString("X")}";
         }
     }
 }
