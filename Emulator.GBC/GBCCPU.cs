@@ -335,230 +335,230 @@ public class GBCCPU : CPU
             case 0x1D: Registers.L = RR(Registers.L); break; // RR L . 2 8 . Z 0 0 C
             case 0x1E: LD8(Registers.HL.Word, RR(LD8(Registers.HL.Word))); break; // RR HL . 2 16 . Z 0 0 C
             case 0x1F: Registers.A = RR(Registers.A); break; // RR A . 2 8 . Z 0 0 C
-            case 0x20: break;
-            case 0x21: break;
-            case 0x22: break;
-            case 0x23: break;
-            case 0x24: break;
-            case 0x25: break;
-            case 0x26: break;
-            case 0x27: break;
-            case 0x28: break;
-            case 0x29: break;
-            case 0x2A: break;
-            case 0x2B: break;
-            case 0x2C: break;
-            case 0x2D: break;
-            case 0x2E: break;
-            case 0x2F: break;
-            case 0x30: break;
-            case 0x31: break;
-            case 0x32: break;
-            case 0x33: break;
-            case 0x34: break;
-            case 0x35: break;
-            case 0x36: break;
-            case 0x37: break;
-            case 0x38: break;
-            case 0x39: break;
-            case 0x3A: break;
-            case 0x3B: break;
-            case 0x3C: break;
-            case 0x3D: break;
-            case 0x3E: break;
-            case 0x3F: break;
-            case 0x40: break;
-            case 0x41: break;
-            case 0x42: break;
-            case 0x43: break;
-            case 0x44: break;
-            case 0x45: break;
-            case 0x46: break;
-            case 0x47: break;
-            case 0x48: break;
-            case 0x49: break;
-            case 0x4A: break;
-            case 0x4B: break;
-            case 0x4C: break;
-            case 0x4D: break;
-            case 0x4E: break;
-            case 0x4F: break;
-            case 0x50: break;
-            case 0x51: break;
-            case 0x52: break;
-            case 0x53: break;
-            case 0x54: break;
-            case 0x55: break;
-            case 0x56: break;
-            case 0x57: break;
-            case 0x58: break;
-            case 0x59: break;
-            case 0x5A: break;
-            case 0x5B: break;
-            case 0x5C: break;
-            case 0x5D: break;
-            case 0x5E: break;
-            case 0x5F: break;
-            case 0x60: break;
-            case 0x61: break;
-            case 0x62: break;
-            case 0x63: break;
-            case 0x64: break;
-            case 0x65: break;
-            case 0x66: break;
-            case 0x67: break;
-            case 0x68: break;
-            case 0x69: break;
-            case 0x6A: break;
-            case 0x6B: break;
-            case 0x6C: break;
-            case 0x6D: break;
-            case 0x6E: break;
-            case 0x6F: break;
-            case 0x70: break;
-            case 0x71: break;
-            case 0x72: break;
-            case 0x73: break;
-            case 0x74: break;
-            case 0x75: break;
-            case 0x76: break;
-            case 0x77: break;
-            case 0x78: break;
-            case 0x79: break;
-            case 0x7A: break;
-            case 0x7B: break;
-            case 0x7C: break;
-            case 0x7D: break;
-            case 0x7E: break;
-            case 0x7F: break;
-            case 0x80: break;
-            case 0x81: break;
-            case 0x82: break;
-            case 0x83: break;
-            case 0x84: break;
-            case 0x85: break;
-            case 0x86: break;
-            case 0x87: break;
-            case 0x88: break;
-            case 0x89: break;
-            case 0x8A: break;
-            case 0x8B: break;
-            case 0x8C: break;
-            case 0x8D: break;
-            case 0x8E: break;
-            case 0x8F: break;
-            case 0x90: break;
-            case 0x91: break;
-            case 0x92: break;
-            case 0x93: break;
-            case 0x94: break;
-            case 0x95: break;
-            case 0x96: break;
-            case 0x97: break;
-            case 0x98: break;
-            case 0x99: break;
-            case 0x9A: break;
-            case 0x9B: break;
-            case 0x9C: break;
-            case 0x9D: break;
-            case 0x9E: break;
-            case 0x9F: break;
-            case 0xA0: break;
-            case 0xA1: break;
-            case 0xA2: break;
-            case 0xA3: break;
-            case 0xA4: break;
-            case 0xA5: break;
-            case 0xA6: break;
-            case 0xA7: break;
-            case 0xA8: break;
-            case 0xA9: break;
-            case 0xAA: break;
-            case 0xAB: break;
-            case 0xAC: break;
-            case 0xAD: break;
-            case 0xAE: break;
-            case 0xAF: break;
-            case 0xB0: break;
-            case 0xB1: break;
-            case 0xB2: break;
-            case 0xB3: break;
-            case 0xB4: break;
-            case 0xB5: break;
-            case 0xB6: break;
-            case 0xB7: break;
-            case 0xB8: break;
-            case 0xB9: break;
-            case 0xBA: break;
-            case 0xBB: break;
-            case 0xBC: break;
-            case 0xBD: break;
-            case 0xBE: break;
-            case 0xBF: break;
-            case 0xC0: break;
-            case 0xC1: break;
-            case 0xC2: break;
-            case 0xC3: break;
-            case 0xC4: break;
-            case 0xC5: break;
-            case 0xC6: break;
-            case 0xC7: break;
-            case 0xC8: break;
-            case 0xC9: break;
-            case 0xCA: break;
-            case 0xCB: break;
-            case 0xCC: break;
-            case 0xCD: break;
-            case 0xCE: break;
-            case 0xCF: break;
-            case 0xD0: break;
-            case 0xD1: break;
-            case 0xD2: break;
-            case 0xD3: break;
-            case 0xD4: break;
-            case 0xD5: break;
-            case 0xD6: break;
-            case 0xD7: break;
-            case 0xD8: break;
-            case 0xD9: break;
-            case 0xDA: break;
-            case 0xDB: break;
-            case 0xDC: break;
-            case 0xDD: break;
-            case 0xDE: break;
-            case 0xDF: break;
-            case 0xE0: break;
-            case 0xE1: break;
-            case 0xE2: break;
-            case 0xE3: break;
-            case 0xE4: break;
-            case 0xE5: break;
-            case 0xE6: break;
-            case 0xE7: break;
-            case 0xE8: break;
-            case 0xE9: break;
-            case 0xEA: break;
-            case 0xEB: break;
-            case 0xEC: break;
-            case 0xED: break;
-            case 0xEE: break;
-            case 0xEF: break;
-            case 0xF0: break;
-            case 0xF1: break;
-            case 0xF2: break;
-            case 0xF3: break;
-            case 0xF4: break;
-            case 0xF5: break;
-            case 0xF6: break;
-            case 0xF7: break;
-            case 0xF8: break;
-            case 0xF9: break;
-            case 0xFA: break;
-            case 0xFB: break;
-            case 0xFC: break;
-            case 0xFD: break;
-            case 0xFE: break;
-            case 0xFF: break;
+            case 0x20: Registers.B = SLA(Registers.B); break; // SLA B . 2 8 . Z 0 0 C
+            case 0x21: Registers.C = SLA(Registers.C); break; // SLA C . 2 8 . Z 0 0 C
+            case 0x22: Registers.D = SLA(Registers.D); break; // SLA D . 2 8 . Z 0 0 C
+            case 0x23: Registers.E = SLA(Registers.E); break; // SLA E . 2 8 . Z 0 0 C
+            case 0x24: Registers.H = SLA(Registers.H); break; // SLA H . 2 8 . Z 0 0 C
+            case 0x25: Registers.L = SLA(Registers.L); break; // SLA L . 2 8 . Z 0 0 C
+            case 0x26: LD8(Registers.HL.Word, SLA(LD8(Registers.HL.Word))); break; // SLA HL . 2 16 . Z 0 0 C
+            case 0x27: Registers.A = SLA(Registers.A); break; // SLA A . 2 8 . Z 0 0 C
+            case 0x28: Registers.B = SRA(Registers.B); break; // SRA B . 2 8 . Z 0 0 0
+            case 0x29: Registers.C = SRA(Registers.C); break; // SRA C . 2 8 . Z 0 0 0
+            case 0x2A: Registers.D = SRA(Registers.D); break; // SRA D . 2 8 . Z 0 0 0
+            case 0x2B: Registers.E = SRA(Registers.E); break; // SRA E . 2 8 . Z 0 0 0
+            case 0x2C: Registers.H = SRA(Registers.H); break; // SRA H . 2 8 . Z 0 0 0
+            case 0x2D: Registers.L = SRA(Registers.L); break; // SRA L . 2 8 . Z 0 0 0
+            case 0x2E: LD8(Registers.HL.Word, SRA(LD8(Registers.HL.Word))); break; // SRA HL . 2 16 . Z 0 0 0
+            case 0x2F: Registers.A = SRA(Registers.A); break; // SRA A . 2 8 . Z 0 0 0
+            case 0x30: Registers.B = SWAP(Registers.B); break; // SWAP B . 2 8 . Z 0 0 0
+            case 0x31: Registers.C = SWAP(Registers.C); break; // SWAP C . 2 8 . Z 0 0 0
+            case 0x32: Registers.D = SWAP(Registers.D); break; // SWAP D . 2 8 . Z 0 0 0
+            case 0x33: Registers.E = SWAP(Registers.E); break; // SWAP E . 2 8 . Z 0 0 0
+            case 0x34: Registers.H = SWAP(Registers.H); break; // SWAP H . 2 8 . Z 0 0 0
+            case 0x35: Registers.L = SWAP(Registers.L); break; // SWAP L . 2 8 . Z 0 0 0
+            case 0x36: LD8(Registers.HL.Word, SWAP(LD8(Registers.HL.Word))); break; // SWAP HL . 2 16 . Z 0 0 0
+            case 0x37: Registers.A = SWAP(Registers.A); break; // SWAP A . 2 8 . Z 0 0 0
+            case 0x38: Registers.B = SRL(Registers.B); break; // SRL B . 2 8 . Z 0 0 C
+            case 0x39: Registers.C = SRL(Registers.C); break; // SRL C . 2 8 . Z 0 0 C
+            case 0x3A: Registers.D = SRL(Registers.D); break; // SRL D . 2 8 . Z 0 0 C
+            case 0x3B: Registers.E = SRL(Registers.E); break; // SRL E . 2 8 . Z 0 0 C
+            case 0x3C: Registers.H = SRL(Registers.H); break; // SRL H . 2 8 . Z 0 0 C
+            case 0x3D: Registers.L = SRL(Registers.L); break; // SRL L . 2 8 . Z 0 0 C
+            case 0x3E: LD8(Registers.HL.Word, SRL(LD8(Registers.HL.Word))); break; // SRL HL . 2 16 . Z 0 0 C
+            case 0x3F: Registers.A = SRL(Registers.A); break; // SRL A . 2 8 . Z 0 0 C
+            case 0x40: BIT(0x01, Registers.B); break; // BIT 0,B . 2 8 . Z 0 1 -
+            case 0x41: BIT(0x01, Registers.C); break; // BIT 0,C . 2 8 . Z 0 1 -
+            case 0x42: BIT(0x01, Registers.D); break; // BIT 0,D . 2 8 . Z 0 1 -
+            case 0x43: BIT(0x01, Registers.E); break; // BIT 0,E . 2 8 . Z 0 1 -
+            case 0x44: BIT(0x01, Registers.H); break; // BIT 0,H . 2 8 . Z 0 1 -
+            case 0x45: BIT(0x01, Registers.L); break; // BIT 0,L . 2 8 . Z 0 1 -
+            case 0x46: BIT(0x01, LD8(Registers.HL.Word)); break; // BIT 0,HL . 2 16 . Z 0 1 -
+            case 0x47: BIT(0x01, Registers.A); break; // BIT 0,A . 2 8 . Z 0 1 -
+            case 0x48: BIT(0x02, Registers.B); break; // BIT 1,B . 2 8 . Z 0 1 -
+            case 0x49: BIT(0x02, Registers.C); break; // BIT 1,C . 2 8 . Z 0 1 -
+            case 0x4A: BIT(0x02, Registers.D); break; // BIT 1,D . 2 8 . Z 0 1 -
+            case 0x4B: BIT(0x02, Registers.E); break; // BIT 1,E . 2 8 . Z 0 1 -
+            case 0x4C: BIT(0x02, Registers.H); break; // BIT 1,H . 2 8 . Z 0 1 -
+            case 0x4D: BIT(0x02, Registers.L); break; // BIT 1,L . 2 8 . Z 0 1 -
+            case 0x4E: BIT(0x02, LD8(Registers.HL.Word)); break; // BIT 1,HL . 2 16 . Z 0 1 -
+            case 0x4F: BIT(0x02, Registers.A); break; // BIT 1,A . 2 8 . Z 0 1 -
+            case 0x50: BIT(0x04, Registers.B); break; // BIT 2,B . 2 8 . Z 0 1 -
+            case 0x51: BIT(0x04, Registers.C); break; // BIT 2,C . 2 8 . Z 0 1 -
+            case 0x52: BIT(0x04, Registers.D); break; // BIT 2,D . 2 8 . Z 0 1 -
+            case 0x53: BIT(0x04, Registers.E); break; // BIT 2,E . 2 8 . Z 0 1 -
+            case 0x54: BIT(0x04, Registers.H); break; // BIT 2,H . 2 8 . Z 0 1 -
+            case 0x55: BIT(0x04, Registers.L); break; // BIT 2,L . 2 8 . Z 0 1 -
+            case 0x56: BIT(0x04, LD8(Registers.HL.Word)); break; // BIT 2,HL . 2 16 . Z 0 1 -
+            case 0x57: BIT(0x04, Registers.A); break; // BIT 2,A . 2 8 . Z 0 1 -
+            case 0x58: BIT(0x08, Registers.B); break; // BIT 3,B . 2 8 . Z 0 1 -
+            case 0x59: BIT(0x08, Registers.C); break; // BIT 3,C . 2 8 . Z 0 1 -
+            case 0x5A: BIT(0x08, Registers.D); break; // BIT 3,D . 2 8 . Z 0 1 -
+            case 0x5B: BIT(0x08, Registers.E); break; // BIT 3,E . 2 8 . Z 0 1 -
+            case 0x5C: BIT(0x08, Registers.H); break; // BIT 3,H . 2 8 . Z 0 1 -
+            case 0x5D: BIT(0x08, Registers.L); break; // BIT 3,L . 2 8 . Z 0 1 -
+            case 0x5E: BIT(0x08, LD8(Registers.HL.Word)); break; // BIT 3,HL . 2 16 . Z 0 1 -
+            case 0x5F: BIT(0x08, Registers.A); break; // BIT 3,A . 2 8 . Z 0 1 -
+            case 0x60: BIT(0x10, Registers.B); break; // BIT 4,B . 2 8 . Z 0 1 -
+            case 0x61: BIT(0x10, Registers.C); break; // BIT 4,C . 2 8 . Z 0 1 -
+            case 0x62: BIT(0x10, Registers.D); break; // BIT 4,D . 2 8 . Z 0 1 -
+            case 0x63: BIT(0x10, Registers.E); break; // BIT 4,E . 2 8 . Z 0 1 -
+            case 0x64: BIT(0x10, Registers.H); break; // BIT 4,H . 2 8 . Z 0 1 -
+            case 0x65: BIT(0x10, Registers.L); break; // BIT 4,L . 2 8 . Z 0 1 -
+            case 0x66: BIT(0x10, LD8(Registers.HL.Word)); break; // BIT 4,HL . 2 16 . Z 0 1 -
+            case 0x67: BIT(0x10, Registers.A); break; // BIT 4,A . 2 8 . Z 0 1 -
+            case 0x68: BIT(0x20, Registers.B); break; // BIT 5,B . 2 8 . Z 0 1 -
+            case 0x69: BIT(0x20, Registers.C); break; // BIT 5,C . 2 8 . Z 0 1 -
+            case 0x6A: BIT(0x20, Registers.D); break; // BIT 5,D . 2 8 . Z 0 1 -
+            case 0x6B: BIT(0x20, Registers.E); break; // BIT 5,E . 2 8 . Z 0 1 -
+            case 0x6C: BIT(0x20, Registers.H); break; // BIT 5,H . 2 8 . Z 0 1 -
+            case 0x6D: BIT(0x20, Registers.L); break; // BIT 5,L . 2 8 . Z 0 1 -
+            case 0x6E: BIT(0x20, LD8(Registers.HL.Word)); break; // BIT 5,HL . 2 16 . Z 0 1 -
+            case 0x6F: BIT(0x20, Registers.A); break; // BIT 5,A . 2 8 . Z 0 1 -
+            case 0x70: BIT(0x40, Registers.B); break; // BIT 6,B . 2 8 . Z 0 1 -
+            case 0x71: BIT(0x40, Registers.C); break; // BIT 6,C . 2 8 . Z 0 1 -
+            case 0x72: BIT(0x40, Registers.D); break; // BIT 6,D . 2 8 . Z 0 1 -
+            case 0x73: BIT(0x40, Registers.E); break; // BIT 6,E . 2 8 . Z 0 1 -
+            case 0x74: BIT(0x40, Registers.H); break; // BIT 6,H . 2 8 . Z 0 1 -
+            case 0x75: BIT(0x40, Registers.L); break; // BIT 6,L . 2 8 . Z 0 1 -
+            case 0x76: BIT(0x40, LD8(Registers.HL.Word)); break; // BIT 6,HL . 2 16 . Z 0 1 -
+            case 0x77: BIT(0x40, Registers.A); break; // BIT 6,A . 2 8 . Z 0 1 -
+            case 0x78: BIT(0x80, Registers.B); break; // BIT 7,B . 2 8 . Z 0 1 -
+            case 0x79: BIT(0x80, Registers.C); break; // BIT 7,C . 2 8 . Z 0 1 -
+            case 0x7A: BIT(0x80, Registers.D); break; // BIT 7,D . 2 8 . Z 0 1 -
+            case 0x7B: BIT(0x80, Registers.E); break; // BIT 7,E . 2 8 . Z 0 1 -
+            case 0x7C: BIT(0x80, Registers.H); break; // BIT 7,H . 2 8 . Z 0 1 -
+            case 0x7D: BIT(0x80, Registers.L); break; // BIT 7,L . 2 8 . Z 0 1 -
+            case 0x7E: BIT(0x80, LD8(Registers.HL.Word)); break; // BIT 7,HL . 2 16 . Z 0 1 -
+            case 0x7F: BIT(0x80, Registers.A); break; // BIT 7,A . 2 8 . Z 0 1 -
+            case 0x80: Registers.B = RES(0x01, Registers.B); break; // RES 0,B . 2 8 . - - - -
+            case 0x81: Registers.C = RES(0x01, Registers.C); break; // RES 0,C . 2 8 . - - - -
+            case 0x82: Registers.D = RES(0x01, Registers.D); break; // RES 0,D . 2 8 . - - - -
+            case 0x83: Registers.E = RES(0x01, Registers.E); break; // RES 0,E . 2 8 . - - - -
+            case 0x84: Registers.H = RES(0x01, Registers.H); break; // RES 0,H . 2 8 . - - - -
+            case 0x85: Registers.L = RES(0x01, Registers.L); break; // RES 0,L . 2 8 . - - - -
+            case 0x86: LD8(Registers.HL.Word, RES(0x01, LD8(Registers.HL.Word))); break; // RES 0,HL . 2 16 . - - - -
+            case 0x87: Registers.A = RES(0x01, Registers.A); break; // RES 0,A . 2 8 . - - - -
+            case 0x88: Registers.B = RES(0x02, Registers.B); break; // RES 1,B . 2 8 . - - - -
+            case 0x89: Registers.C = RES(0x02, Registers.C); break; // RES 1,C . 2 8 . - - - -
+            case 0x8A: Registers.D = RES(0x02, Registers.D); break; // RES 1,D . 2 8 . - - - -
+            case 0x8B: Registers.E = RES(0x02, Registers.E); break; // RES 1,E . 2 8 . - - - -
+            case 0x8C: Registers.H = RES(0x02, Registers.H); break; // RES 1,H . 2 8 . - - - -
+            case 0x8D: Registers.L = RES(0x02, Registers.L); break; // RES 1,L . 2 8 . - - - -
+            case 0x8E: LD8(Registers.HL.Word, RES(0x02, LD8(Registers.HL.Word))); break; // RES 1,HL . 2 16 . - - - -
+            case 0x8F: Registers.A = RES(0x02, Registers.A); break; // RES 1,A . 2 8 . - - - -
+            case 0x90: Registers.B = RES(0x04, Registers.B); break; // RES 2,B . 2 8 . - - - -
+            case 0x91: Registers.C = RES(0x04, Registers.C); break; // RES 2,C . 2 8 . - - - -
+            case 0x92: Registers.D = RES(0x04, Registers.D); break; // RES 2,D . 2 8 . - - - -
+            case 0x93: Registers.E = RES(0x04, Registers.E); break; // RES 2,E . 2 8 . - - - -
+            case 0x94: Registers.H = RES(0x04, Registers.H); break; // RES 2,H . 2 8 . - - - -
+            case 0x95: Registers.L = RES(0x04, Registers.L); break; // RES 2,L . 2 8 . - - - -
+            case 0x96: LD8(Registers.HL.Word, RES(0x04, LD8(Registers.HL.Word))); break; // RES 2,HL . 2 16 . - - - -
+            case 0x97: Registers.A = RES(0x04, Registers.A); break; // RES 2,A . 2 8 . - - - -
+            case 0x98: Registers.B = RES(0x08, Registers.B); break; // RES 3,B . 2 8 . - - - -
+            case 0x99: Registers.C = RES(0x08, Registers.C); break; // RES 3,C . 2 8 . - - - -
+            case 0x9A: Registers.D = RES(0x08, Registers.D); break; // RES 3,D . 2 8 . - - - -
+            case 0x9B: Registers.E = RES(0x08, Registers.E); break; // RES 3,E . 2 8 . - - - -
+            case 0x9C: Registers.H = RES(0x08, Registers.H); break; // RES 3,H . 2 8 . - - - -
+            case 0x9D: Registers.L = RES(0x08, Registers.L); break; // RES 3,L . 2 8 . - - - -
+            case 0x9E: LD8(Registers.HL.Word, RES(0x08, LD8(Registers.HL.Word))); break; // RES 3,HL . 2 16 . - - - -
+            case 0x9F: Registers.A = RES(0x08, Registers.A); break; // RES 3,A . 2 8 . - - - -
+            case 0xA0: Registers.B = RES(0x10, Registers.B); break; // RES 4,B . 2 8 . - - - -
+            case 0xA1: Registers.C = RES(0x10, Registers.C); break; // RES 4,C . 2 8 . - - - -
+            case 0xA2: Registers.D = RES(0x10, Registers.D); break; // RES 4,D . 2 8 . - - - -
+            case 0xA3: Registers.E = RES(0x10, Registers.E); break; // RES 4,E . 2 8 . - - - -
+            case 0xA4: Registers.H = RES(0x10, Registers.H); break; // RES 4,H . 2 8 . - - - -
+            case 0xA5: Registers.L = RES(0x10, Registers.L); break; // RES 4,L . 2 8 . - - - -
+            case 0xA6: LD8(Registers.HL.Word, RES(0x10, LD8(Registers.HL.Word))); break; // RES 4,HL . 2 16 . - - - -
+            case 0xA7: Registers.A = RES(0x10, Registers.A); break; // RES 4,A . 2 8 . - - - -
+            case 0xA8: Registers.B = RES(0x20, Registers.B); break; // RES 5,B . 2 8 . - - - -
+            case 0xA9: Registers.C = RES(0x20, Registers.C); break; // RES 5,C . 2 8 . - - - -
+            case 0xAA: Registers.D = RES(0x20, Registers.D); break; // RES 5,D . 2 8 . - - - -
+            case 0xAB: Registers.E = RES(0x20, Registers.E); break; // RES 5,E . 2 8 . - - - -
+            case 0xAC: Registers.H = RES(0x20, Registers.H); break; // RES 5,H . 2 8 . - - - -
+            case 0xAD: Registers.L = RES(0x20, Registers.L); break; // RES 5,L . 2 8 . - - - -
+            case 0xAE: LD8(Registers.HL.Word, RES(0x20, LD8(Registers.HL.Word))); break; // RES 5,HL . 2 16 . - - - -
+            case 0xAF: Registers.A = RES(0x20, Registers.A); break; // RES 5,A . 2 8 . - - - -
+            case 0xB0: Registers.B = RES(0x40, Registers.B); break; // RES 6,B . 2 8 . - - - -
+            case 0xB1: Registers.C = RES(0x40, Registers.C); break; // RES 6,C . 2 8 . - - - -
+            case 0xB2: Registers.D = RES(0x40, Registers.D); break; // RES 6,D . 2 8 . - - - -
+            case 0xB3: Registers.E = RES(0x40, Registers.E); break; // RES 6,E . 2 8 . - - - -
+            case 0xB4: Registers.H = RES(0x40, Registers.H); break; // RES 6,H . 2 8 . - - - -
+            case 0xB5: Registers.L = RES(0x40, Registers.L); break; // RES 6,L . 2 8 . - - - -
+            case 0xB6: LD8(Registers.HL.Word, RES(0x40, LD8(Registers.HL.Word))); break; // RES 6,HL . 2 16 . - - - -
+            case 0xB7: Registers.A = RES(0x40, Registers.A); break; // RES 6,A . 2 8 . - - - -
+            case 0xB8: Registers.B = RES(0x80, Registers.B); break; // RES 7,B . 2 8 . - - - -
+            case 0xB9: Registers.C = RES(0x80, Registers.C); break; // RES 7,C . 2 8 . - - - -
+            case 0xBA: Registers.D = RES(0x80, Registers.D); break; // RES 7,D . 2 8 . - - - -
+            case 0xBB: Registers.E = RES(0x80, Registers.E); break; // RES 7,E . 2 8 . - - - -
+            case 0xBC: Registers.H = RES(0x80, Registers.H); break; // RES 7,H . 2 8 . - - - -
+            case 0xBD: Registers.L = RES(0x80, Registers.L); break; // RES 7,L . 2 8 . - - - -
+            case 0xBE: LD8(Registers.HL.Word, RES(0x80, LD8(Registers.HL.Word))); break; // RES 7,HL . 2 16 . - - - -
+            case 0xBF: Registers.A = RES(0x80, Registers.A); break; // RES 7,A . 2 8 . - - - -
+            case 0xC0: Registers.B = SET(0x01, Registers.B); break; // SET 0,B . 2 8 . - - - -
+            case 0xC1: Registers.C = SET(0x01, Registers.C); break; // SET 0,C . 2 8 . - - - -
+            case 0xC2: Registers.D = SET(0x01, Registers.D); break; // SET 0,D . 2 8 . - - - -
+            case 0xC3: Registers.E = SET(0x01, Registers.E); break; // SET 0,E . 2 8 . - - - -
+            case 0xC4: Registers.H = SET(0x01, Registers.H); break; // SET 0,H . 2 8 . - - - -
+            case 0xC5: Registers.L = SET(0x01, Registers.L); break; // SET 0,L . 2 8 . - - - -
+            case 0xC6: LD8(Registers.HL.Word, SET(0x01, LD8(Registers.HL.Word))); break; // SET 0,HL . 2 16 . - - - -
+            case 0xC7: Registers.A = SET(0x01, Registers.A); break; // SET 0,A . 2 8 . - - - -
+            case 0xC8: Registers.B = SET(0x02, Registers.B); break; // SET 1,B . 2 8 . - - - -
+            case 0xC9: Registers.C = SET(0x02, Registers.C); break; // SET 1,C . 2 8 . - - - -
+            case 0xCA: Registers.D = SET(0x02, Registers.D); break; // SET 1,D . 2 8 . - - - -
+            case 0xCB: Registers.E = SET(0x02, Registers.E); break; // SET 1,E . 2 8 . - - - -
+            case 0xCC: Registers.H = SET(0x02, Registers.H); break; // SET 1,H . 2 8 . - - - -
+            case 0xCD: Registers.L = SET(0x02, Registers.L); break; // SET 1,L . 2 8 . - - - -
+            case 0xCE: LD8(Registers.HL.Word, SET(0x02, LD8(Registers.HL.Word))); break; // SET 1,HL . 2 16 . - - - -
+            case 0xCF: Registers.A = SET(0x02, Registers.A); break; // SET 1,A . 2 8 . - - - -
+            case 0xD0: Registers.B = SET(0x04, Registers.B); break; // SET 2,B . 2 8 . - - - -
+            case 0xD1: Registers.C = SET(0x04, Registers.C); break; // SET 2,C . 2 8 . - - - -
+            case 0xD2: Registers.D = SET(0x04, Registers.D); break; // SET 2,D . 2 8 . - - - -
+            case 0xD3: Registers.E = SET(0x04, Registers.E); break; // SET 2,E . 2 8 . - - - -
+            case 0xD4: Registers.H = SET(0x04, Registers.H); break; // SET 2,H . 2 8 . - - - -
+            case 0xD5: Registers.L = SET(0x04, Registers.L); break; // SET 2,L . 2 8 . - - - -
+            case 0xD6: LD8(Registers.HL.Word, SET(0x04, LD8(Registers.HL.Word))); break; // SET 2,HL . 2 16 . - - - -
+            case 0xD7: Registers.A = SET(0x04, Registers.A); break; // SET 2,A . 2 8 . - - - -
+            case 0xD8: Registers.B = SET(0x08, Registers.B); break; // SET 3,B . 2 8 . - - - -
+            case 0xD9: Registers.C = SET(0x08, Registers.C); break; // SET 3,C . 2 8 . - - - -
+            case 0xDA: Registers.D = SET(0x08, Registers.D); break; // SET 3,D . 2 8 . - - - -
+            case 0xDB: Registers.E = SET(0x08, Registers.E); break; // SET 3,E . 2 8 . - - - -
+            case 0xDC: Registers.H = SET(0x08, Registers.H); break; // SET 3,H . 2 8 . - - - -
+            case 0xDD: Registers.L = SET(0x08, Registers.L); break; // SET 3,L . 2 8 . - - - -
+            case 0xDE: LD8(Registers.HL.Word, SET(0x08, LD8(Registers.HL.Word))); break; // SET 3,HL . 2 16 . - - - -
+            case 0xDF: Registers.A = SET(0x08, Registers.A); break; // SET 3,A . 2 8 . - - - -
+            case 0xE0: Registers.B = SET(0x10, Registers.B); break; // SET 4,B . 2 8 . - - - -
+            case 0xE1: Registers.C = SET(0x10, Registers.C); break; // SET 4,C . 2 8 . - - - -
+            case 0xE2: Registers.D = SET(0x10, Registers.D); break; // SET 4,D . 2 8 . - - - -
+            case 0xE3: Registers.E = SET(0x10, Registers.E); break; // SET 4,E . 2 8 . - - - -
+            case 0xE4: Registers.H = SET(0x10, Registers.H); break; // SET 4,H . 2 8 . - - - -
+            case 0xE5: Registers.L = SET(0x10, Registers.L); break; // SET 4,L . 2 8 . - - - -
+            case 0xE6: LD8(Registers.HL.Word, SET(0x10, LD8(Registers.HL.Word))); break; // SET 4,HL . 2 16 . - - - -
+            case 0xE7: Registers.A = SET(0x10, Registers.A); break; // SET 4,A . 2 8 . - - - -
+            case 0xE8: Registers.B = SET(0x20, Registers.B); break; // SET 5,B . 2 8 . - - - -
+            case 0xE9: Registers.C = SET(0x20, Registers.C); break; // SET 5,C . 2 8 . - - - -
+            case 0xEA: Registers.D = SET(0x20, Registers.D); break; // SET 5,D . 2 8 . - - - -
+            case 0xEB: Registers.E = SET(0x20, Registers.E); break; // SET 5,E . 2 8 . - - - -
+            case 0xEC: Registers.H = SET(0x20, Registers.H); break; // SET 5,H . 2 8 . - - - -
+            case 0xED: Registers.L = SET(0x20, Registers.L); break; // SET 5,L . 2 8 . - - - -
+            case 0xEE: LD8(Registers.HL.Word, SET(0x20, LD8(Registers.HL.Word))); break; // SET 5,HL . 2 16 . - - - -
+            case 0xEF: Registers.A = SET(0x20, Registers.A); break; // SET 5,A . 2 8 . - - - -
+            case 0xF0: Registers.B = SET(0x40, Registers.B); break; // SET 6,B . 2 8 . - - - -
+            case 0xF1: Registers.C = SET(0x40, Registers.C); break; // SET 6,C . 2 8 . - - - -
+            case 0xF2: Registers.D = SET(0x40, Registers.D); break; // SET 6,D . 2 8 . - - - -
+            case 0xF3: Registers.E = SET(0x40, Registers.E); break; // SET 6,E . 2 8 . - - - -
+            case 0xF4: Registers.H = SET(0x40, Registers.H); break; // SET 6,H . 2 8 . - - - -
+            case 0xF5: Registers.L = SET(0x40, Registers.L); break; // SET 6,L . 2 8 . - - - -
+            case 0xF6: LD8(Registers.HL.Word, SET(0x40, LD8(Registers.HL.Word))); break; // SET 6,HL . 2 16 . - - - -
+            case 0xF7: Registers.A = SET(0x40, Registers.A); break; // SET 6,A . 2 8 . - - - -
+            case 0xF8: Registers.B = SET(0x80, Registers.B); break; // SET 7,B . 2 8 . - - - -
+            case 0xF9: Registers.C = SET(0x80, Registers.C); break; // SET 7,C . 2 8 . - - - -
+            case 0xFA: Registers.D = SET(0x80, Registers.D); break; // SET 7,D . 2 8 . - - - -
+            case 0xFB: Registers.E = SET(0x80, Registers.E); break; // SET 7,E . 2 8 . - - - -
+            case 0xFC: Registers.H = SET(0x80, Registers.H); break; // SET 7,H . 2 8 . - - - -
+            case 0xFD: Registers.L = SET(0x80, Registers.L); break; // SET 7,L . 2 8 . - - - -
+            case 0xFE: LD8(Registers.HL.Word, SET(0x80, LD8(Registers.HL.Word))); break; // SET 7,HL . 2 16 . - - - -
+            case 0xFF: Registers.A = SET(0x80, Registers.A); break; // SET 7,A . 2 8 . - - - -
             default: Console.WriteLine($"PC {Registers.PC.Word} OPCode {opCode.ToString("X2")} not implemented"); break;
         }
 

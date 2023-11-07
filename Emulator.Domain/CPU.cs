@@ -116,12 +116,62 @@ public class CPU : IFlags
     internal virtual byte RR(byte v)
     {
         var prevC = Registers.CarryFlag;
-        byte result = (byte)((v >> 1) | (prevC ? 1 : 0));
+        byte result = (byte)((v >> 1) | (prevC ? 0x80 : 0));
         UpdateZeroFlag(result);
         Registers.SubstractFlag = false;
         Registers.HaltFlag = false;
         UpdateCarryFlagLeast(v);
         return result;
+    }
+    internal virtual byte SLA(byte v)
+    {
+        byte result = (byte)(v << 1);
+        UpdateZeroFlag(result);
+        Registers.SubstractFlag = false;
+        Registers.HaltFlag = false;
+        UpdateCarryFlagMost(v);
+        return result;
+    }
+    internal virtual byte SRA(byte v)
+    {
+        byte result = (byte)(v >> 1 | (v & 0x80));
+        UpdateZeroFlag(result);
+        Registers.SubstractFlag = false;
+        Registers.HaltFlag = false;
+        Registers.CarryFlag = false;
+        return result;
+    }
+    internal virtual byte SWAP(byte v)
+    {
+        byte result = (byte)((v & 0xF0) >> 4 | (v & 0x0F));
+        UpdateZeroFlag(result);
+        Registers.SubstractFlag = false;
+        Registers.HaltFlag = false;
+        Registers.CarryFlag = false;
+        return result;
+    }
+    internal virtual byte SRL(byte v)
+    {
+        byte result = (byte)(v >> 1);
+        UpdateZeroFlag(result);
+        Registers.SubstractFlag = false;
+        Registers.HaltFlag = false;
+        UpdateCarryFlagLeast(v);
+        return result;
+    }
+    internal virtual void BIT(byte mask, byte v)
+    {
+        UpdateZeroFlag(v & mask);
+        Registers.SubstractFlag = false;
+        Registers.HaltFlag = true;
+    }
+    internal virtual byte RES(byte mask, byte v)
+    {
+        return (byte)(v & ~mask);
+    }
+    internal virtual byte SET(byte mask, byte v)
+    {
+        return (byte)(v | mask);
     }
 
     #endregion
