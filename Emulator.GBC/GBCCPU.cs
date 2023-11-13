@@ -23,8 +23,9 @@ public class GBCCPU : CPU
         Registers.SP = 0xFFFE;
     }
     // TODO: Implement interrupts
-    public bool IME { get; private set; }
-    public bool HALTED { get; private set; }
+    private bool IME { get; set; }
+    private bool HALTED { get; set; }
+    private bool HALT_BUG { get; set; }
 
     public override void Execute()
     {
@@ -32,6 +33,11 @@ public class GBCCPU : CPU
         {
             Console.WriteLine($"Something went wrong, reading instruction out of ROM {Registers.PC.Word.ToString("x4")}");
             return;
+        }
+        if (HALT_BUG)
+        {
+            Registers.PC--;
+            HALT_BUG = false;
         }
         var opCode = Hardware.Memory.Read(this.Registers.PC.Word);
         
@@ -571,6 +577,11 @@ public class GBCCPU : CPU
         {
             if((MEMORY.IE & MEMORY.IF) != 0){
                 HALTED = true;
+                Registers.PC--;
+            }
+            else
+            {
+                HALT_BUG = true;
             }
         }
     }

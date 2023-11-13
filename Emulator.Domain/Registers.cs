@@ -57,6 +57,7 @@ namespace Emulator.Domain
 
         public ushort SP { get; set; }
         public Register PC { get; set; } = new ();
+        public bool IME { get; set; }
 
         public override string ToString()
         {

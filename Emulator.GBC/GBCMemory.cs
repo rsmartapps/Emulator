@@ -1,6 +1,5 @@
 ﻿using Emulator.Domain;
 using Emulator.GBC.MBC;
-using System.Runtime.Intrinsics.Arm;
 
 namespace Emulator.GBC;
 /// <summary>
@@ -45,7 +44,7 @@ public class GBCMemory : MachineMemory
     public byte IF { get { return Read(0xFF0F); } set { Write(0xFF0F, value); } }//FF0F - IF - Interrupt Flag (R/W)
     IMBC MBC;
     /// <summary>
-    /// Addresses: 0000h - 7FFFh
+    /// Addresses: 0000h - FFFFh
     /// The lower 32KB of the address space is reserved for ROM, where the game's program code is stored. The Game Boy cartridge contains the game's ROM.
     /// The DMG uses bank switching to access additional ROM banks if present in the cartridge.
     /// </summary>
@@ -55,10 +54,6 @@ public class GBCMemory : MachineMemory
     /// This memory region stores the graphics data used for rendering sprites, backgrounds, and tiles on the screen. It is organized into tile maps and tile data.
     /// </summary>
     byte[] VRAM = new byte[0x9FFF];
-    /// <summary>
-    /// Addresses: A000h - BFFFh
-    /// Cartridges may contain additional RAM for save game data or other purposes.This region is used to access that external RAM.
-    /// </summary>
 
     public override void Load(byte[] file)
     {
@@ -89,7 +84,7 @@ public class GBCMemory : MachineMemory
                 case < ROM__BANK_HIGH:
                     return MBC.Read(address);
                 case < VRAM_HIGH:
-                    return VRAM[address];
+                    return VRAM[address - 0x8000];
                 case < CRAM_HIGH:
                     return RAM[address];
                 case < WRAM_HIGH:

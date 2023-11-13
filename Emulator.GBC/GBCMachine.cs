@@ -1,36 +1,32 @@
 ﻿using Emulator.Domain;
-using System;
-using System.Collections.Generic;
-using System.IO.MemoryMappedFiles;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Emulator.GBC
+namespace Emulator.GBC;
+
+public class GBCMachine : IMachine
 {
-    public class GBCMachine : IMachine
+    GBCPPU PPU { get { return (GBCPPU)Hardware.PPU; } }
+    public GBCMachine()
     {
-        public GBCMachine()
+        Hardware.Memory = new GBCMemory();
+        Hardware.CPU = new GBCCPU();
+        Hardware.PPU = new GBCPPU();
+    }
+
+    public void ExecuteGame()
+    {
+        while(true)
         {
-            Hardware.Memory = new GBCMemory();
-            Hardware.CPU = new GBCCPU();
-        }
-
-        public void ExecuteGame()
-        {
-            while(true)
-            {
-                Hardware.CPU.Execute();
-            }
-        }
-
-        public Task LoadGame(string path)
-        {
-            var file = File.ReadAllBytes(path);
-            Hardware.Memory.Load(file);
-
-
-            return Task.CompletedTask;
+            Hardware.CPU.Execute();
         }
     }
+
+    public Task LoadGame(string path)
+    {
+        var file = File.ReadAllBytes(path);
+        Hardware.Memory.Load(file);
+
+
+        return Task.CompletedTask;
+    }
 }
+
