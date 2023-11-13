@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.GBC", "Emulator.GBC\Emulator.GBC.csproj", "{E2629797-9549-40E2-9269-10614A6E7EEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Domain", "src\core\Emulator.Domain\Emulator.Domain.csproj", "{04CBD63A-0D02-4F40-AE42-F9FD4371B050}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Domain", "Emulator.Domain\Emulator.Domain.csproj", "{04CBD63A-0D02-4F40-AE42-F9FD4371B050}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Player", "Emulator.Player\Emulator.Player.csproj", "{EDE018ED-3CFA-4510-AC8D-F8E00B7309AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Player", "src\Emulator.Player\Emulator.Player.csproj", "{EDE018ED-3CFA-4510-AC8D-F8E00B7309AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROMs", "ROMs", "{3465EF3F-979A-4BEC-915E-436BE7EB1AB3}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROMs", "ROMs", "{3465EF3F-9
 		ROMs\Tennis.gb = ROMs\Tennis.gb
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Development", "Emulator.Development\Emulator.Development.csproj", "{7ECB4C7C-65C9-43C6-9071-7D69A8AF3A83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.Development", "src\Emulator.Development\Emulator.Development.csproj", "{7ECB4C7C-65C9-43C6-9071-7D69A8AF3A83}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestROMs", "TestROMs", "{36E161BF-B951-4E2D-B89A-85CE4C97BD1B}"
 EndProject
@@ -45,13 +43,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0BD0FB45
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CGB", "CGB", "{2FC560EB-4097-4ED6-A24D-DCC05A37963F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.CGB.CPU", "CGB\Emulator.CGB.CPU\Emulator.CGB.CPU.csproj", "{5515E3C5-7E0D-4D33-9B64-4F4FF555FD02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.CGB.CPU", "src\CGB\Emulator.CGB.CPU\Emulator.CGB.CPU.csproj", "{5515E3C5-7E0D-4D33-9B64-4F4FF555FD02}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.CGB.Memory", "CGB\Emulator.CGB.Memory\Emulator.CGB.Memory.csproj", "{1A0614F0-3569-4EF7-927A-89F476184ABC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.CGB.Memory", "src\CGB\Emulator.CGB.Memory\Emulator.CGB.Memory.csproj", "{1A0614F0-3569-4EF7-927A-89F476184ABC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.CGB.ConsoleTests", "Tests\Emulator.CGB.SourceGeneratorTests\Emulator.CGB.ConsoleTests.csproj", "{51AD084B-8CC5-4E76-99F6-75B7F0F6E2D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.CGB.ConsoleTests", "src\tests\Emulator.CGB.ConsoleTests\Emulator.CGB.ConsoleTests.csproj", "{51AD084B-8CC5-4E76-99F6-75B7F0F6E2D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.CGB.Tests", "Tests\Emulator.CGB.Tests\Emulator.CGB.Tests.csproj", "{087EA2E6-14D5-4E37-8C5D-4D1C5645C78D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{06B458A6-2328-4720-9796-7A420CE9D5AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aplication", "Aplication", "{FF5D035A-F310-47BC-9B8A-AA2D6C3B4029}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +59,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E2629797-9549-40E2-9269-10614A6E7EEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2629797-9549-40E2-9269-10614A6E7EEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2629797-9549-40E2-9269-10614A6E7EEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2629797-9549-40E2-9269-10614A6E7EEC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{04CBD63A-0D02-4F40-AE42-F9FD4371B050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{04CBD63A-0D02-4F40-AE42-F9FD4371B050}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04CBD63A-0D02-4F40-AE42-F9FD4371B050}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -87,22 +83,20 @@ Global
 		{51AD084B-8CC5-4E76-99F6-75B7F0F6E2D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51AD084B-8CC5-4E76-99F6-75B7F0F6E2D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51AD084B-8CC5-4E76-99F6-75B7F0F6E2D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{087EA2E6-14D5-4E37-8C5D-4D1C5645C78D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{087EA2E6-14D5-4E37-8C5D-4D1C5645C78D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{087EA2E6-14D5-4E37-8C5D-4D1C5645C78D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{087EA2E6-14D5-4E37-8C5D-4D1C5645C78D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{04CBD63A-0D02-4F40-AE42-F9FD4371B050} = {06B458A6-2328-4720-9796-7A420CE9D5AA}
+		{EDE018ED-3CFA-4510-AC8D-F8E00B7309AE} = {FF5D035A-F310-47BC-9B8A-AA2D6C3B4029}
+		{7ECB4C7C-65C9-43C6-9071-7D69A8AF3A83} = {FF5D035A-F310-47BC-9B8A-AA2D6C3B4029}
 		{36E161BF-B951-4E2D-B89A-85CE4C97BD1B} = {3465EF3F-979A-4BEC-915E-436BE7EB1AB3}
 		{D6910A0C-D37C-4917-9224-078FB1857FE1} = {36E161BF-B951-4E2D-B89A-85CE4C97BD1B}
 		{3D251104-33C1-483C-8913-9E2AFE989D2A} = {D6910A0C-D37C-4917-9224-078FB1857FE1}
 		{5515E3C5-7E0D-4D33-9B64-4F4FF555FD02} = {2FC560EB-4097-4ED6-A24D-DCC05A37963F}
 		{1A0614F0-3569-4EF7-927A-89F476184ABC} = {2FC560EB-4097-4ED6-A24D-DCC05A37963F}
 		{51AD084B-8CC5-4E76-99F6-75B7F0F6E2D6} = {0BD0FB45-A817-47CA-9C4C-E0EE3798747B}
-		{087EA2E6-14D5-4E37-8C5D-4D1C5645C78D} = {0BD0FB45-A817-47CA-9C4C-E0EE3798747B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A663038-6047-4365-85D5-8E8A99521DB4}
