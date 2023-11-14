@@ -2,7 +2,7 @@
 
 public class BitOps
 {
-    public static bool GetBit(byte data, int bitIndex)
+    public static bool IsBit(byte data, int bitIndex)
     {
         return (data & (1 << (bitIndex - 1))) != 0;
     }

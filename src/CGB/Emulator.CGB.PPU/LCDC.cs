@@ -8,17 +8,17 @@ public class LCDC
 
     public byte data { get; set; }
 
-    public bool Enabled { 
+    public bool On { 
         get
         {
-            return BitOps.GetBit(data, 1);
+            return BitOps.IsBit(data, 1);
         } 
     }
     public ushort WindowTileMapArea
     {
         get
         {
-            if (BitOps.GetBit(data, 2))
+            if (BitOps.IsBit(data, 2))
                 return 0x9800;
             else
                 return 0x9C00;
@@ -28,14 +28,14 @@ public class LCDC
     {
         get
         {
-            return BitOps.GetBit(data, 3);
+            return BitOps.IsBit(data, 3);
         }
     }
     public ushort BGWindowTileDataArea
     {
         get
         {
-            if (BitOps.GetBit(data, 2))
+            if (BitOps.IsBit(data, 2))
                 return 0x8800;
             else
                 return 0x8000;
@@ -45,7 +45,7 @@ public class LCDC
     {
         get
         {
-            if (BitOps.GetBit(data, 2))
+            if (BitOps.IsBit(data, 2))
                 return 0x9800;
             else
                 return 0x9C00;
@@ -55,21 +55,21 @@ public class LCDC
     {
         get
         {
-            return BitOps.GetBit(data, 6);
+            return BitOps.IsBit(data, 6);
         }
     }
     public bool OBJEnabled
     {
         get
         {
-            return BitOps.GetBit(data, 7);
+            return BitOps.IsBit(data, 7);
         }
     }
     public bool BGWindowEnablePriority
     {
         get
         {
-            return BitOps.GetBit(data,8);
+            return BitOps.IsBit(data,8);
         }
     }
 
