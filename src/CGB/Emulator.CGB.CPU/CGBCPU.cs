@@ -2,11 +2,14 @@
 using Emulator.CGB.Memory;
 using Emulator.CGB.Memory.MBC;
 using System.Linq.Expressions;
+using Emulator.Domain.Tools;
 
 namespace Emulator.CGB.CPU
 {
     internal class CGBCPU
     {
+        public const ushort ADDRESS_IE = 0xFFFF;
+        public const ushort ADDRESS_IF = 0xFF0F;
         public Registers Registers { get; private set; } = new();
         public IMBC Ram { get; private set; }
 
@@ -20,21 +23,60 @@ namespace Emulator.CGB.CPU
         public CGBCPU(IMBC ram)
         {
             if (ram == null)
-                ram = new MBC0(new byte[0xFFFFF]);
+                ram = new MBC0(new byte[1]);
             Ram = ram;
         }
 
         public int ProcessOperation()
         {
+            ProcessInterrupts();
+
             if (HALT_BUG)
             {
                 Registers.PC--;
                 HALT_BUG = false;
             }
             var opCode = Ram.Read(this.Registers.PC.Word);
-
-            //Console.WriteLine(this);
             this.Registers.PC++;
+            Console.WriteLine(this);
+            ExecuteOperation(opCode);
+            return _cylcleCounter;
+        }
+
+        private void ProcessInterrupts()
+        {
+            bool updateIF = false;
+            if (HALTED)
+            {
+                Registers.PC++;
+                HALTED = false;
+            }
+            if (IME)
+            {
+                IE = Ram.Read(ADDRESS_IE);
+                IF = Ram.Read(ADDRESS_IF);
+                for (int interrupt = 0; interrupt < 5; interrupt++)
+                {
+                    if ((((IE & IF) >> interrupt) & 0x1) == 1)
+                    {
+                        PUSH(Registers.PC.High, Registers.PC.Low);
+                        Registers.PC.Word = (ushort)(0x40 + (8 * interrupt));
+                        IF = BitOps.bitClear(interrupt, IF);
+                        IME = false;
+                        goto EXIT;
+                    }
+                }
+            EXIT:
+                if (updateIF)
+                {
+                    Ram.Write(ADDRESS_IF, IF);
+                }
+            }
+        }
+
+        #region OPCodes
+        private void ExecuteOperation(byte opCode)
+        {
             switch (opCode)
             {
                 case 0x00: break; // NOP . 1 4 . - - - -
@@ -248,7 +290,7 @@ namespace Emulator.CGB.CPU
                 case 0xD0: RET(!Registers.CarryFlag); break; // RET NC . 1 20/8 . - - - -
                 case 0xD1: Registers.DE.Word = POP(); break; // POP DE . 1 12 . - - - -
                 case 0xD2: JP(!Registers.CarryFlag); break; // JP NZ,a16 . 3 16/12 . - - - -
-                                                           //case 0xD3: break;
+                                                            //case 0xD3: break;
                 case 0xD4: CALL(!Registers.CarryFlag); break; // CALL NC,a16 . 3 24/12 - - - -
                 case 0xD5: PUSH(Registers.DE.High, Registers.DE.Low); break; // PUSH DE . 1 16 . - - - -
                 case 0xD6: SUB(LD8(Registers.PC.Word)); Registers.PC++; break; // SUB d8 . 2 8 . Z 1 H C
@@ -278,7 +320,7 @@ namespace Emulator.CGB.CPU
                 case 0xEE: XOR(LD8(Registers.PC.Word)); Registers.PC++; break; // XOR d8 . 2 8 . Z 0 0 0
                 case 0xEF: RST(0X28); break; // RST 28H . 1 16 . - - - -
                 case 0xF0: Registers.A = LDHP8(Registers.PC.Word); Registers.PC++; break; // LDH A,(a8) . 2 12 . - - - -
-                case 0xF1: 
+                case 0xF1:
                     Registers.AF.Word = POP();
                     var z = Registers.ZeroFlag;
                     var s = Registers.SubstractFlag;
@@ -300,13 +342,12 @@ namespace Emulator.CGB.CPU
                 case 0xF9: Registers.SP = Registers.HL.Word; break; // LD SP,HL . 1 8 . - - - -
                 case 0xFA: Registers.A = LDP16(); break; // LD A,(a16) . 3 16 . - - - -
                 case 0xFB: EI(); break; // EI . 1 8 . - - - -
-                                              //case 0xFC: break;
-                                              //case 0xFD: break;
+                                        //case 0xFC: break;
+                                        //case 0xFD: break;
                 case 0xFE: CP(Registers.A, LD8(Registers.PC.Word)); Registers.PC++; break; // CP d8 . 2 8 . Z 1 H C
                 case 0xFF: RST(0x38); break; // RST 38H . 1 16 . - - - -
-                //default: Console.WriteLine($"PC {Registers.PC.Word} OPCode {opCode.ToString("X2")} not implemented"); break;
+                                             //default: Console.WriteLine($"PC {Registers.PC.Word} OPCode {opCode.ToString("X2")} not implemented"); break;
             }
-            return _cylcleCounter;
         }
 
         private void PREFIX_CB(ushort opCode)
@@ -573,9 +614,9 @@ namespace Emulator.CGB.CPU
             }
 
         }
+        #endregion
 
-
-        public virtual void EI()
+        internal virtual void EI()
         {
             IME |= IME;
         }

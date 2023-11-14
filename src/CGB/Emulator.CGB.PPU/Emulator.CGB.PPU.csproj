@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\Emulator.Domain\Emulator.Domain.csproj" />
+    <ProjectReference Include="..\Emulator.CGB.Memory\Emulator.CGB.Memory.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,5 @@
 ﻿namespace Emulator.Domain;
 
-public class PPU
+public interface IPPU
 {
 }

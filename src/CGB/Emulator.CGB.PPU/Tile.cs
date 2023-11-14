@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Emulator.Domain
+namespace Emulator.CGB.PPU
 {
-    public class Jumps
+    internal class Tile
     {
+        public byte[] Pixels { get; } = new byte[16];
     }
 }
