@@ -5,9 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Emulator.Domain\Emulator.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>Emulator.Player</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Emulator.CGB.CPU\Emulator.CGB.CPU.csproj" />
+	  <ProjectReference Include="..\Emulator.CGB.PPU\Emulator.CGB.PPU.csproj" />
+	</ItemGroup>
 
 </Project>

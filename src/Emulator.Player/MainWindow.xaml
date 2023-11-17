@@ -6,8 +6,6 @@
         xmlns:local="clr-namespace:Emulator.Player"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-		<Button Content="Button" HorizontalAlignment="Left" Margin="163,37,0,0" VerticalAlignment="Top" Click="LoadGame" />
-
+    <Grid x:Name="mainGrid">
 	</Grid>
 </Window>

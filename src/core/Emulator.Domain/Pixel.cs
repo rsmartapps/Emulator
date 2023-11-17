@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Emulator.GBC
+namespace Emulator.Domain
 {
-    public enum OPCodes
+    public class Pixel
     {
-        NOP = 0x00
     }
 }

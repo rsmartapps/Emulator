@@ -1,0 +1,109 @@
+﻿<Window x:Class="Emulator.Player.DebugWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Emulator.Player"
+        mc:Ignorable="d"
+        Title="DebugWindow" Height="450" Width="800">
+    <Grid x:Name="GameGrid">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Image x:Name="ImageGame" Grid.ColumnSpan="6" Grid.RowSpan="6" />
+
+		<Grid Grid.Row="6" Grid.ColumnSpan="6" Grid.RowSpan="6">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+				<TextBlock Text="{Binding Logs}" TextWrapping="Wrap"/>
+				
+			</ScrollViewer>
+			<Grid  Grid.Row="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<Label Grid.ColumnSpan="19">Registers</Label>
+				<Label Grid.Row="1">A</Label>
+
+				<TextBox x:Name="A" Grid.Row="1" Grid.Column="1" Text="{Binding A}" IsEnabled="False" IsReadOnly="True" />
+				<Label Grid.Row="1" Grid.Column="2" >B</Label>
+				<TextBox x:Name="B" Grid.Row="1" Grid.Column="3"  Text="{Binding B}"  IsEnabled="False" IsReadOnly="True"  />
+				<Label Grid.Row="1" Grid.Column="4" >C</Label>
+				<TextBox x:Name="C" Grid.Row="1" Grid.Column="5"  Text="{Binding C}"  IsEnabled="False"  IsReadOnly="True" />
+				<Label Grid.Row="1" Grid.Column="6" >D</Label>
+				<TextBox x:Name="D" Grid.Row="1" Grid.Column="7"  Text="{Binding D}"  IsEnabled="False"  IsReadOnly="True" />
+				<Label Grid.Row="1" Grid.Column="8" >E</Label>
+				<TextBox x:Name="E" Grid.Row="1" Grid.Column="9"  Text="{Binding E}"  IsEnabled="False"  IsReadOnly="True" />
+				<Label Grid.Row="1" Grid.Column="10" >H</Label>
+				<TextBox x:Name="H" Grid.Row="1" Grid.Column="11"  Text="{Binding H}"  IsEnabled="False"  IsReadOnly="True" />
+				<Label Grid.Row="1" Grid.Column="12" >L</Label>
+				<TextBox x:Name="L" Grid.Row="1" Grid.Column="13"  Text="{Binding L}"  IsEnabled="False"  IsReadOnly="True" />
+				<Label Grid.Row="1" Grid.Column="14" >SP</Label>
+				<TextBox x:Name="SP" Grid.Row="1" Grid.Column="15"  Text="{Binding SP}"  IsEnabled="False"  IsReadOnly="True" />
+				<Label Grid.Row="1" Grid.Column="16" >PC</Label>
+				<TextBox x:Name="PC" Grid.Row="1" Grid.Column="17"  Text="{Binding PC}"  IsEnabled="False"  IsReadOnly="True" />
+				<Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="19">Flags</Label>
+				<Label Grid.Row="3" Foreground="{Binding Zero}" Grid.Column="0" Grid.ColumnSpan="2">Zero</Label>
+				<Label Grid.Row="3" Foreground="{Binding Substract}" Grid.Column="2" Grid.ColumnSpan="3">Substract</Label>
+				<Label Grid.Row="3" Foreground="{Binding Halt}" Grid.Column="5" Grid.ColumnSpan="2">Halt</Label>
+				<Label Grid.Row="3" Foreground="{Binding Carry}" Grid.Column="7" Grid.ColumnSpan="2">Carry</Label>
+				<Label Grid.Row="3" Foreground="{Binding IME}" Grid.Column="9" Grid.ColumnSpan="2">IME</Label>
+				<Label Grid.Row="3" Foreground="{Binding Zero}" Grid.Column="11" Grid.ColumnSpan="1">IE</Label>
+				<Label Grid.Row="3" Foreground="{Binding Zero}" Grid.Column="12" Grid.ColumnSpan="1">IF</Label>
+			</Grid>
+		</Grid>
+		<Image x:Name="ImageVRAM" Grid.RowSpan="6" Grid.ColumnSpan="6" Grid.Column="6" Grid.Row="0" Source="{Binding BitmapVRAM}" />
+		<Image x:Name="ImageORAM" Grid.RowSpan="6" Grid.ColumnSpan="6" Grid.Column="6" Grid.Row="6" Source="{Binding BitmapORAM}"/>
+	</Grid>
+</Window>

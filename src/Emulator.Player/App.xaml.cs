@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Emulator.Player
 {
@@ -13,5 +7,10 @@ namespace Emulator.Player
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            //this.StartupUri = new System.Uri("MainWindow.xaml", System.UriKind.Relative);
+            this.StartupUri = new System.Uri("DebugWindow.xaml", System.UriKind.Relative);
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace Emulator.Domain
 {
     public interface IMachine
     {
-        Task LoadGame(string path);
-        void ExecuteGame();
+        Task InsertCartRidge(string path);
+        void RunGame();
     }
 }
