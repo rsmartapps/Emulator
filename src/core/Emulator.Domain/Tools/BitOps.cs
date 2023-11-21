@@ -22,4 +22,12 @@ public class BitOps
     {
         return v |= (byte)(1 << n);
     }
+
+    public static byte GetBit(byte data, int index) => (byte)((data >> index) & 1);
+
+    public static int JoinBits(byte left, byte right, int bitPosition)
+    {
+
+        return (GetBit(left, bitPosition) << 1) + GetBit(right, bitPosition);
+    }
 }

@@ -21,10 +21,12 @@ public class PPUUnit : IPPU
 
 
     private ICGBMemoryBus _Memory { get; }
+    private PPUContenxt _context;
 
     public PPUUnit(ICGBMemoryBus memory)
     {
         _Memory = memory;
+        _context = new PPUContenxt(memory);
     }
 
     private LCDC _LCDC = new();

@@ -10,8 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROMs", "ROMs", "{3465EF3F-979A-4BEC-915E-436BE7EB1AB3}"
 	ProjectSection(SolutionItems) = preProject
 		ROMs\Galaga - Destination Earth.gbc = ROMs\Galaga - Destination Earth.gbc
+		ROMs\Pokemon - Blue Version (USA, Europe) (SGB Enhanced).gb = ROMs\Pokemon - Blue Version (USA, Europe) (SGB Enhanced).gb
 		ROMs\Pokemon - Crystal.gbc = ROMs\Pokemon - Crystal.gbc
 		ROMs\Pokemon - Yellow.gbc = ROMs\Pokemon - Yellow.gbc
+		ROMs\Pokemon Red.gb = ROMs\Pokemon Red.gb
 		ROMs\Tennis.gb = ROMs\Tennis.gb
 	EndProjectSection
 EndProject
@@ -55,7 +57,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aplication", "Aplication", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.CGB.PPU", "src\CGB\Emulator.CGB.PPU\Emulator.CGB.PPU.csproj", "{A2ACA956-B7C3-4FCB-9913-C78F3486503F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emulator.GBC", "src\CGB\Emulator.GBC\Emulator.GBC.csproj", "{3C29140C-2F03-4646-80AA-4F9929E43B0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emulator.GBC", "src\CGB\Emulator.GBC\Emulator.GBC.csproj", "{3C29140C-2F03-4646-80AA-4F9929E43B0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

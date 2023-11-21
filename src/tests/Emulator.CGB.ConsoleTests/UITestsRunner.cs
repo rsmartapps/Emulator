@@ -14,6 +14,7 @@ namespace Emulator.CGB.ConsoleTests
     {
         public static void Run(string path)
         {
+            
             Stopwatch sw = Stopwatch.StartNew();
             var totalOPCodesFailed = 0;
             foreach (var file in Directory.EnumerateFiles(path))
