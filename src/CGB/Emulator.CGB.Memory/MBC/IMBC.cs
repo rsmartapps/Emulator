@@ -1,8 +1,10 @@
 ﻿namespace Emulator.CGB.Memory.MBC;
 
-internal interface IMBC
+public interface IMBC
 {
-    public IDictionary<ushort, byte> RAM { get; }
-    byte Read(ushort address);
-    void Write(ushort address, byte value);
+    byte ReadLowRom(ushort address);
+    byte ReadBankRom(ushort address, ushort romBank);
+    byte ReadSRam(ushort address);
+    void WriteSRam(ushort address, byte value);
+    byte ReadBankRam(ushort address, byte wRamBank);
 }

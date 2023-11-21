@@ -1,11 +1,11 @@
-﻿using Emulator.CGB.Memory.MBC;
+﻿using Emulator.CGB.Memory;
+using Emulator.CGB.Memory.MBC;
 using Emulator.Domain;
 using Emulator.Domain.Tools;
-using System;
 
 namespace Emulator.CGB.PPU;
 
-internal class PPUUnit : IPPU
+public class PPUUnit : IPPU
 {
     private const int SCREEN_WIDTH = 160;
     private const int SCREEN_HEIGHT = 144;
@@ -19,9 +19,10 @@ internal class PPUUnit : IPPU
     private const int VBLANK_INTERRUPT = 0;
     private const int LCD_INTERRUPT = 1;
 
-    private IMBC _Memory { get; }
 
-    public PPUUnit(IMBC memory)
+    private ICGBMemoryBus _Memory { get; }
+
+    public PPUUnit(ICGBMemoryBus memory)
     {
         _Memory = memory;
     }

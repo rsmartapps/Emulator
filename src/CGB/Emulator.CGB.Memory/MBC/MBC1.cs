@@ -24,40 +24,34 @@
 /// 01h = RAM Banking Mode (up to 32KByte RAM, 512KByte ROM)
 /// The program may freely switch between both modes, the only limitiation is that only RAM Bank 00h can be used during Mode 0, and only ROM Banks 00-1Fh can be used during Mode 1.
 /// </summary>
-internal class MBC1 : MBC0
+internal class MBC1 :  MBC0, IMBC
 {
     const int CRAM_HIGH = 0xBFFF;
-    protected Dictionary<ushort, byte> CRAM = new((CRAM_HIGH - 0xA000) + 1);
+    protected Dictionary<ushort, byte> SRAM = new((CRAM_HIGH - 0xA000) + 1);
     /// <summary>
     /// Addresses: C000h - DFFFh
     /// This is the system's main working memory where the game can store variables, temporary data, and other runtime information.
 
     public MBC1(byte[] ROM) : base(ROM) { }
 
-    public byte ReadERAM(ushort addr)
+
+    public byte ReadBankRom(ushort address, ushort romBank)
     {
         throw new NotImplementedException();
     }
 
-    public byte ReadHiROM(ushort addr)
+    public byte ReadBankRam(ushort address, byte wRamBank)
     {
         throw new NotImplementedException();
     }
 
-    public void WriteCRAM(ushort addr, byte value)
+    public byte ReadSRam(ushort address)
     {
         throw new NotImplementedException();
     }
 
-    public void WriteROM(ushort addr, byte value)
+    public void WriteSRam(ushort address, byte value)
     {
-        switch(addr)
-        {
-            case <= 0x7FFF:
-                Console.WriteLine($"Can't write this area {addr.ToString("X")}");
-                break;
-            case <= 0xBFFF:
-                break;
-        }
+        throw new NotImplementedException();
     }
 }

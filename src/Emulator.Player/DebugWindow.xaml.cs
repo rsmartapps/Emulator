@@ -1,13 +1,10 @@
-﻿using Emulator.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using System.Drawing;
+using System.IO;
+using System.Threading;
 using System.Timers;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using Emulator.GBC;
 
 namespace Emulator.Player
 {
@@ -16,50 +13,56 @@ namespace Emulator.Player
     /// </summary>
     public partial class DebugWindow : Window
     {
-        Timer timer;
         DebugWindowVM vm;
+        Thread thread;
 
         public DebugWindow()
         {
             InitializeComponent();
             vm = new DebugWindowVM();
             DataContext = vm;
-            timer = new Timer(500);
-            timer.Elapsed += UpdateDebugWIndow;
-            timer.AutoReset = true;
-            timer.Enabled = true;
+            vm.BitmapVRAM = new Bitmap(256, 256);
+            this.Loaded += WindowLoaded;
+            thread = new Thread(UpdateDebugWIndow);
+            thread.Start();
         }
 
-        int counter = 0;
-        private void UpdateDebugWIndow(object? sender, ElapsedEventArgs e)
+        private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            counter++;
-            try
+            LoadGame("B:\\Dev\\Emulators\\ROMs\\Tennis.gb");
+        }
+
+        private void UpdateDebugWIndow()
+        {
+           while(true)
             {
-                Dispatcher.Invoke(() =>
+                try
                 {
-                    try {
-                        vm.BitmapVRAM = new BitmapImage();
-                        vm.BitmapORAM = new BitmapImage();
-                        vm.Logs = $"Counter count {counter}";
-                        UpdateLayout();
-                        vm.Zero = vm.GetColor(true);
-                        vm.Substract = vm.GetColor(false);
-                        vm.Halt = vm.GetColor(true);
-                        vm.Carry = vm.GetColor(false);
-                        vm.IME = vm.GetColor(true);
-
-                    }
-                    catch (Exception ex)
+                    Dispatcher.InvokeAsync(() =>
                     {
+                        try
+                        {
+                            vm.Update();
+                        }
+                        catch (Exception ex)
+                        {
 
-                    }
-                });
-            }
-            catch(Exception ex)
-            {
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
 
+                }
+                Thread.Sleep(2000);
             }
+        }
+
+        public void LoadGame(string path)
+        {
+            vm.Machine = new CGBMachine();
+            vm.machine.InsertCartRidge(path);
+            vm.Start();
         }
     }
 }

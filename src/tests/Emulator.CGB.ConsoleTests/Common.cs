@@ -4,7 +4,7 @@ namespace Emulator.CGB.ConsoleTests;
 
 public static class Common
 {
-    internal static void InitializeCPU(CGBCPU gbcpu, Initial initial)
+    public static void InitializeCPU(CGBCPU gbcpu, Initial initial)
     {
         gbcpu.Registers.A = initial.a;
         gbcpu.Registers.F = initial.f;
@@ -24,7 +24,7 @@ public static class Common
             gbcpu.Ram.Write((ushort)initial.ram[row][0], (byte)initial.ram[row][1]);
         }
     }
-    internal static Final GetCPUAsFinal(CGBCPU gbcpu)
+    public static Final GetCPUAsFinal(CGBCPU gbcpu)
     {
         return new Final
         {
@@ -39,7 +39,7 @@ public static class Common
             pc = gbcpu.Registers.PC.Word,
             sp = gbcpu.Registers.SP,
             ime = gbcpu.IME ? 1 : 0,
-            ram = gbcpu.Ram.RAM.Select(s => new int[] { s.Key,s.Value}).ToArray(),
+            ram = ((MBCMock)gbcpu.Ram).RAM.Select(s => new int[] { s.Key,s.Value}).ToArray(),
         };
     }
 }

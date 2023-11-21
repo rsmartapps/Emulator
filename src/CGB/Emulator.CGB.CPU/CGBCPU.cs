@@ -1,29 +1,32 @@
 ﻿using Emulator.Domain;
 using Emulator.CGB.Memory;
 using Emulator.CGB.Memory.MBC;
-using System.Linq.Expressions;
 using Emulator.Domain.Tools;
 
 namespace Emulator.CGB.CPU
 {
-    internal class CGBCPU
+    public class CGBCPU
     {
         public const ushort ADDRESS_IE = 0xFFFF;
         public const ushort ADDRESS_IF = 0xFF0F;
         public Registers Registers { get; private set; } = new();
-        public IMBC Ram { get; private set; }
+        public ICGBMemoryBus Ram { get; private set; }
 
         private int _cylcleCounter = 0;
-        public bool IME = false;
-        public byte IE = 0;
+        public bool IME;
+        public byte IE
+        {
+            get { return LD8(0xFFFF); }
+            set { LD8(0xFFFF, value); }
+        }
         public byte IF = 0;
         public bool HALTED = false;
         public bool HALT_BUG = false;
 
-        public CGBCPU(IMBC ram)
+        public CGBCPU(ICGBMemoryBus ram)
         {
             if (ram == null)
-                ram = new MBC0(new byte[1]);
+                ram = new CGBMemoryBus();
             Ram = ram;
         }
 
@@ -616,11 +619,11 @@ namespace Emulator.CGB.CPU
         }
         #endregion
 
-        internal virtual void EI()
+        public virtual void EI()
         {
             IME |= IME;
         }
-        internal virtual void HALT()
+        public virtual void HALT()
         {
             // TODO: Implement
             if (!IME)
@@ -638,7 +641,7 @@ namespace Emulator.CGB.CPU
         }
 
         #region Logic Operations
-        internal virtual void OR(byte v2)
+        public virtual void OR(byte v2)
         {
             Registers.A = (byte)(Registers.A | v2);
             UpdateZeroFlag(Registers.A);
@@ -646,7 +649,7 @@ namespace Emulator.CGB.CPU
             Registers.HaltFlag = false;
             Registers.CarryFlag = false;
         }
-        internal virtual void XOR( byte v2)
+        public virtual void XOR( byte v2)
         {
             Registers.A = (byte)(Registers.A ^ v2);
             UpdateZeroFlag(Registers.A);
@@ -654,7 +657,7 @@ namespace Emulator.CGB.CPU
             Registers.HaltFlag = false;
             Registers.CarryFlag = false;
         }
-        internal virtual void AND(byte v2)
+        public virtual void AND(byte v2)
         {
             Registers.A = (byte)(Registers.A & v2);
             UpdateZeroFlag(Registers.A);
@@ -662,7 +665,7 @@ namespace Emulator.CGB.CPU
             Registers.HaltFlag = true;
             Registers.CarryFlag = false;
         }
-        internal virtual void CP(byte v1, byte v2)
+        public virtual void CP(byte v1, byte v2)
         {
             var result = v1 - v2;
             UpdateZeroFlag(result);
@@ -670,7 +673,7 @@ namespace Emulator.CGB.CPU
             UpdateHaltFlagSub(v1, v2);
             UpdateCarryFlag(result);
         }
-        internal virtual byte RLC(byte v)
+        public virtual byte RLC(byte v)
         {
             byte result = (byte)((v << 1) | (v >> 7));
             UpdateZeroFlag(result);
@@ -679,7 +682,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlagMost(v);
             return result;
         }
-        internal virtual byte RRC(byte v)
+        public virtual byte RRC(byte v)
         {
             var result = ((v >> 1) | (v << 7));
             UpdateZeroFlag(result);
@@ -688,7 +691,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlagLeast(v);
             return (byte)result;
         }
-        internal virtual byte RL(byte v)
+        public virtual byte RL(byte v)
         {
             var prevC = Registers.CarryFlag;
             var result = ((v << 1) | (prevC ? 1 : 0));
@@ -698,7 +701,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlagMost(v);
             return (byte)result;
         }
-        internal virtual byte RR(byte v)
+        public virtual byte RR(byte v)
         {
             var prevC = Registers.CarryFlag;
             var result = ((v >> 1) | (prevC ? 0x80 : 0));
@@ -708,7 +711,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlagLeast(v);
             return (byte)result;
         }
-        internal virtual byte SLA(byte v)
+        public virtual byte SLA(byte v)
         {
             var result = (v << 1);
             UpdateZeroFlag(result);
@@ -717,7 +720,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlagMost(v);
             return (byte)result;
         }
-        internal virtual byte SRA(byte v)
+        public virtual byte SRA(byte v)
         {
             var result = (v >> 1 | (v & 0x80));
             UpdateZeroFlag(result);
@@ -726,7 +729,7 @@ namespace Emulator.CGB.CPU
             Registers.CarryFlag = (v & 0x1) != 0;
             return (byte)result;
         }
-        internal virtual byte SWAP(byte v)
+        public virtual byte SWAP(byte v)
         {
             var result = (byte)((v & 0xF0) >> 4 | (v & 0x0F) << 4);
             UpdateZeroFlag(result);
@@ -735,7 +738,7 @@ namespace Emulator.CGB.CPU
             Registers.CarryFlag = false;
             return result;
         }
-        internal virtual byte SRL(byte v)
+        public virtual byte SRL(byte v)
         {
             var result = (v >> 1);
             UpdateZeroFlag(result);
@@ -744,17 +747,17 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlagLeast(v);
             return (byte)result;
         }
-        internal virtual void BIT(byte mask, byte v)
+        public virtual void BIT(byte mask, byte v)
         {
             UpdateZeroFlag(v & mask);
             Registers.SubstractFlag = false;
             Registers.HaltFlag = true;
         }
-        internal virtual byte RES(byte mask, byte v)
+        public virtual byte RES(byte mask, byte v)
         {
             return (byte)(v & ~mask);
         }
-        internal virtual byte SET(byte mask, byte v)
+        public virtual byte SET(byte mask, byte v)
         {
             return (byte)(v | mask);
         }
@@ -767,22 +770,22 @@ namespace Emulator.CGB.CPU
         /// Reads 8bits from memory (byte)
         /// </summary>
         /// <param name="address"></param>
-        internal virtual byte LDP8(ushort address)
+        public virtual byte LDP8(ushort address)
         {
             return Ram.Read(Ram.Read(address));
         }
-        internal virtual void LDP8(byte value)
+        public virtual void LDP8(byte value)
         {
             Ram.Write(LD16(), value);
         }
-        internal virtual byte LD8(ushort address) => Ram.Read(address);
-        internal virtual void LD8(ushort address, byte value) => Ram.Write(address, value);
-        internal virtual void LDP8(ushort address, byte value) => Ram.Write(LD8(address), value);
-        internal virtual byte LDHP8(ushort address) => Ram.Read((ushort)(0xFF00 + Ram.Read(address)));
-        internal virtual void LDH8(ushort address, byte value) => Ram.Write((ushort)(0xFF00 + address), value);
-        internal virtual void LDHA8(ushort address, byte value) => Ram.Write((ushort)(0xFF00 + LD8(address)), value);
-        internal virtual byte LDHA8(ushort address) => Ram.Read((ushort)(0xFF00 + address));
-        internal virtual ushort LD16()
+        public virtual byte LD8(ushort address) => Ram.Read(address);
+        public virtual void LD8(ushort address, byte value) => Ram.Write(address, value);
+        public virtual void LDP8(ushort address, byte value) => Ram.Write(LD8(address), value);
+        public virtual byte LDHP8(ushort address) => Ram.Read((ushort)(0xFF00 + Ram.Read(address)));
+        public virtual void LDH8(ushort address, byte value) => Ram.Write((ushort)(0xFF00 + address), value);
+        public virtual void LDHA8(ushort address, byte value) => Ram.Write((ushort)(0xFF00 + LD8(address)), value);
+        public virtual byte LDHA8(ushort address) => Ram.Read((ushort)(0xFF00 + address));
+        public virtual ushort LD16()
         {
             var r = new Register();
             r.Low = Ram.Read(Registers.PC.Word);
@@ -791,11 +794,11 @@ namespace Emulator.CGB.CPU
             Registers.PC++;
             return r.Word;
         }
-        internal virtual byte LDP16()
+        public virtual byte LDP16()
         {
             return Ram.Read(LD16());
         }
-        internal virtual void LD16(ushort value)
+        public virtual void LD16(ushort value)
         {
             var r = new Register(value);
             LD8(Registers.PC.Word, r.Low);
@@ -803,7 +806,7 @@ namespace Emulator.CGB.CPU
             LD8(Registers.PC.Word, r.High);
             Registers.PC++;
         }
-        internal virtual void LDP16(ushort value)
+        public virtual void LDP16(ushort value)
         {
             var r = new Register(value);
             var address = new Register(LD16());
@@ -815,7 +818,7 @@ namespace Emulator.CGB.CPU
 
         #region Addings
 
-        internal virtual ushort ADDr8(ushort v1)
+        public virtual ushort ADDr8(ushort v1)
         {
             var v2 = LD16();
             Registers.PC--;
@@ -826,7 +829,7 @@ namespace Emulator.CGB.CPU
             return (ushort)(v1 + (sbyte)v2);
         }
 
-        internal virtual void ADC(byte v2)
+        public virtual void ADC(byte v2)
         {
             var v1 = Registers.A;
             var carry = Registers.CarryFlag ? 1 : 0;
@@ -841,7 +844,7 @@ namespace Emulator.CGB.CPU
             Registers.A = (byte)result;
         }
 
-        internal virtual void ADD( byte v2)
+        public virtual void ADD( byte v2)
         {
             var v1 = Registers.A;
             var result = (ushort)(v1 + v2);
@@ -852,7 +855,7 @@ namespace Emulator.CGB.CPU
             Registers.A =(byte)result;
         }
 
-        internal virtual ushort ADD(ushort v1, ushort v2)
+        public virtual ushort ADD(ushort v1, ushort v2)
         {
             var sumValue = (v1 + v2);
             Registers.SubstractFlag = false;
@@ -864,7 +867,7 @@ namespace Emulator.CGB.CPU
         #endregion
 
         #region Substractions
-        internal virtual byte SBC8(byte v1, byte v2)
+        public virtual byte SBC8(byte v1, byte v2)
         {
             var value = (v1 - v2 - (Registers.CarryFlag ? 1 : 0));
 
@@ -881,7 +884,7 @@ namespace Emulator.CGB.CPU
         #endregion
 
         #region Decrement
-        internal virtual void SUBC(byte v2)
+        public virtual void SUBC(byte v2)
         {
             var v1 = Registers.A;
             var carry = Registers.CarryFlag ? 1 : 0;
@@ -895,7 +898,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlag(result);
             Registers.A = (byte)result;
         }
-        internal virtual void SUB(byte v2)
+        public virtual void SUB(byte v2)
         {
             var v1 = Registers.A;
             var result = v1 - v2;
@@ -905,7 +908,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlag(result);
             Registers.A = (byte)result;
         }
-        internal virtual byte DEC(byte value, byte decrement)
+        public virtual byte DEC(byte value, byte decrement)
         {
             UpdateHaltFlagSub(value, decrement);
             value -= decrement;
@@ -914,7 +917,7 @@ namespace Emulator.CGB.CPU
             return value;
         }
 
-        internal virtual void DECA(ushort address, byte increment)
+        public virtual void DECA(ushort address, byte increment)
         {
             var value = Ram.Read(address);
             Ram.Write(address, DEC(value, increment));
@@ -922,13 +925,13 @@ namespace Emulator.CGB.CPU
         #endregion
 
         #region Increments
-        internal virtual void INCA(ushort address, byte increment)
+        public virtual void INCA(ushort address, byte increment)
         {
             var value = Ram.Read(address);
             Ram.Write(address, INC(value, increment));
         }
 
-        internal virtual byte INC(byte value, byte increment)
+        public virtual byte INC(byte value, byte increment)
         {
             Registers.HaltFlag = ((value & 0xF) + (increment & 0xF)) > 0xF;
             value += increment;
@@ -936,7 +939,7 @@ namespace Emulator.CGB.CPU
             Registers.SubstractFlag = false;
             return value;
         }
-        internal virtual ushort INC(ushort value, byte increment)
+        public virtual ushort INC(ushort value, byte increment)
         {
             value += increment;
             return value;
@@ -944,7 +947,7 @@ namespace Emulator.CGB.CPU
         #endregion
 
         #region Jumps
-        internal virtual void RET(bool flag = false)
+        public virtual void RET(bool flag = false)
         {
             // TODO: Update Cycles
             if (flag)
@@ -960,7 +963,7 @@ namespace Emulator.CGB.CPU
         /// </summary>
         /// <param name="flag"></param>
         /// <exception cref="NotImplementedException"></exception>
-        internal virtual void JR(bool flag)
+        public virtual void JR(bool flag)
         {
             // TODO: Add Cycles
             if (flag)
@@ -973,7 +976,7 @@ namespace Emulator.CGB.CPU
         /// Jump to address
         /// </summary>
         /// <param name="address"></param>
-        internal virtual void JP(bool flag)
+        public virtual void JP(bool flag)
         {
             if (flag)
             {
@@ -988,7 +991,7 @@ namespace Emulator.CGB.CPU
         #endregion
 
         #region Others
-        internal virtual ushort POP()
+        public virtual ushort POP()
         {
             var low = Ram.Read(Registers.SP);
             Registers.SP++;
@@ -996,19 +999,19 @@ namespace Emulator.CGB.CPU
             Registers.SP++;
             return (ushort)((high << 8) | low);
         }
-        internal virtual void CCF()
+        public virtual void CCF()
         {
             Registers.CarryFlag = !Registers.CarryFlag;
             Registers.HaltFlag = false;
             Registers.SubstractFlag = false;
         }
-        internal virtual void SCF()
+        public virtual void SCF()
         {
             Registers.CarryFlag = true;
             Registers.HaltFlag = false;
             Registers.SubstractFlag = false;
         }
-        internal virtual void DAA()
+        public virtual void DAA()
         {
             var a = Registers.A;
             var cf = Registers.CarryFlag;
@@ -1055,7 +1058,7 @@ namespace Emulator.CGB.CPU
             }
             return a;
         }
-        internal virtual void DAA2()
+        public virtual void DAA2()
         {
             var a = Registers.A;
             var lowNibble = (byte)(Registers.A & 0x0F);
@@ -1133,8 +1136,8 @@ namespace Emulator.CGB.CPU
             //Registers.HaltFlag = hfAfter;
             _cylcleCounter += 4;
         }
-        internal virtual void STOP() { }
-        internal virtual byte RRA(byte value)
+        public virtual void STOP() { }
+        public virtual byte RRA(byte value)
         {
             Registers.ZeroFlag = false;
             Registers.SubstractFlag = false;
@@ -1144,7 +1147,7 @@ namespace Emulator.CGB.CPU
             return (byte)((value >> 1) | (prevFlag ? 0x80 : 0));
         }
 
-        internal virtual byte RRCA(byte value)
+        public virtual byte RRCA(byte value)
         {
             Registers.ZeroFlag = false;
             Registers.SubstractFlag = false;
@@ -1152,7 +1155,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlagLeast(value);
             return (byte)((value >> 1) | (value << 7));
         }
-        internal virtual byte RLCA(byte value)
+        public virtual byte RLCA(byte value)
         {
             Registers.ZeroFlag = false;
             Registers.SubstractFlag = false;
@@ -1160,7 +1163,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlagMost(value);
             return (byte)((value << 1) | (value >> 7));
         }
-        internal virtual byte RLA(byte value)
+        public virtual byte RLA(byte value)
         {
             Registers.ZeroFlag = false;
             Registers.SubstractFlag = false;
@@ -1169,7 +1172,7 @@ namespace Emulator.CGB.CPU
             UpdateCarryFlagMost(value);
             return (byte)((value << 1) | (oldFlag ? 1 : 0));
         }
-        internal virtual void CALL(bool flag)
+        public virtual void CALL(bool flag)
         {
             if (flag)
             {
@@ -1181,7 +1184,7 @@ namespace Emulator.CGB.CPU
             }
         }
 
-        internal virtual void CALL()
+        public virtual void CALL()
         {
             var low = Ram.Read(Registers.PC.Word);
             Registers.PC++;
@@ -1190,18 +1193,18 @@ namespace Emulator.CGB.CPU
             PUSH(Registers.PC.High, Registers.PC.Low);
             Registers.PC.Word = (ushort)((high << 8) | low);
         }
-        internal virtual void CPL()
+        public virtual void CPL()
         {
             Registers.A = (byte)~Registers.A;
             Registers.HaltFlag = true;
             Registers.SubstractFlag = true;
         }
-        internal virtual void DI()
+        public virtual void DI()
         {
             Registers.Interrupt = false;
         }
 
-        internal virtual void RST(byte OPCode)
+        public virtual void RST(byte OPCode)
         {
             PUSH(Registers.PC.High, Registers.PC.Low);
             Registers.PC.Word = OPCode;
@@ -1209,7 +1212,7 @@ namespace Emulator.CGB.CPU
         #endregion
 
         #region Memory and stack manipulation
-        internal virtual void PUSH(byte high, byte low)
+        public virtual void PUSH(byte high, byte low)
         {
             Registers.SP--;
             Ram.Write(Registers.SP, high);
@@ -1284,6 +1287,19 @@ namespace Emulator.CGB.CPU
             var pc2 = LD8((ushort)(Registers.PC.Word + 2)).ToString("X2");
             var pc3 = LD8((ushort)(Registers.PC.Word + 3)).ToString("X2");
             return $"A: {Registers.A.ToString("X2")} F: {Registers.F.ToString("X2")} B: {Registers.B.ToString("X2")} C: {Registers.C.ToString("X2")} D: {Registers.D.ToString("X2")} E: {Registers.E.ToString("X2")} H: {Registers.H.ToString("X2")} L: {Registers.L.ToString("X2")} SP: {Registers.SP.ToString("X2")} PC: {Registers.PC.Word.ToString("X4")} ({pc} {pc1} {pc2} {pc3})";
+        }
+
+        internal void Initialize()
+        {
+            Registers.A = 0x11;
+            Registers.ZeroFlag = true;
+            Registers.BC.Word = 0;
+            Registers.DE.Word = 0;
+            Registers.HL.Word = 0;
+            Registers.PC.Word = 0x0100;
+            Registers.SP = 0xFFFE;
+            IF = 0xE1;
+            IE = 0;
         }
         #endregion
     }

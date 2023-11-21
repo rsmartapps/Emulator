@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Emulator.CGB.PPU
 {
-    internal class Tile
+    public class Tile
     {
         public byte[] Pixels { get; } = new byte[16];
     }

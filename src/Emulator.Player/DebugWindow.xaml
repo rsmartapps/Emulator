@@ -66,6 +66,8 @@
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*"/>
@@ -90,9 +92,9 @@
 				<Label Grid.Row="1" Grid.Column="12" >L</Label>
 				<TextBox x:Name="L" Grid.Row="1" Grid.Column="13"  Text="{Binding L}"  IsEnabled="False"  IsReadOnly="True" />
 				<Label Grid.Row="1" Grid.Column="14" >SP</Label>
-				<TextBox x:Name="SP" Grid.Row="1" Grid.Column="15"  Text="{Binding SP}"  IsEnabled="False"  IsReadOnly="True" />
-				<Label Grid.Row="1" Grid.Column="16" >PC</Label>
-				<TextBox x:Name="PC" Grid.Row="1" Grid.Column="17"  Text="{Binding PC}"  IsEnabled="False"  IsReadOnly="True" />
+				<TextBox x:Name="SP" Grid.Row="1" Grid.Column="15" Grid.ColumnSpan="2"   Text="{Binding SP}"  IsEnabled="False"  IsReadOnly="True" />
+				<Label Grid.Row="1" Grid.Column="17" >PC</Label>
+				<TextBox x:Name="PC" Grid.Row="1" Grid.Column="18" Grid.ColumnSpan="2" Text="{Binding PC}"  IsEnabled="False"  IsReadOnly="True" />
 				<Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="19">Flags</Label>
 				<Label Grid.Row="3" Foreground="{Binding Zero}" Grid.Column="0" Grid.ColumnSpan="2">Zero</Label>
 				<Label Grid.Row="3" Foreground="{Binding Substract}" Grid.Column="2" Grid.ColumnSpan="3">Substract</Label>

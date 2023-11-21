@@ -18,6 +18,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\CGB\Emulator.CGB.CPU\Emulator.CGB.CPU.csproj" />
+	  <ProjectReference Include="..\..\CGB\Emulator.GBC\Emulator.GBC.csproj" />
 	</ItemGroup>
 
 

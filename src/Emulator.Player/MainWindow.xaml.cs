@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Emulator.CGB;
-
+using Emulator.GBC;
 
 namespace Emulator.Player;
 

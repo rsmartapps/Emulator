@@ -1,8 +1,12 @@
-﻿namespace Emulator.CGB.Memory
+﻿using Emulator.CGB.Memory.MBC;
+using Emulator.Domain;
+
+namespace Emulator.CGB.Memory
 {
-    internal interface ICGBMemoryBus
+    public interface ICGBMemoryBus :IMemoryBus
     {
-        byte Read(ushort address);
-        void Write(ushort address, byte value);
+        public IMBC Cartridge { get; set; }
+        public byte Read(ushort address);
+        public void Write(ushort address, byte value);
     }
 }

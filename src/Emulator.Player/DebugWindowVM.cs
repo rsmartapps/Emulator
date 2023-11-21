@@ -1,7 +1,9 @@
 ﻿using Emulator.Domain;
+using Emulator.GBC;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,17 @@ namespace Emulator.Player
 {
     public class DebugWindowVM : WindowVM
     {
+        internal CGBMachine machine
+        {
+            get
+            {
+                return (CGBMachine)Machine;
+            }
+            set
+            {
+                Machine = value;
+            }
+        }
         #region registers
         private string _A;
         public string A
@@ -223,8 +236,8 @@ namespace Emulator.Player
             }
         }
 
-        private BitmapImage _BitmapVRAM;
-        public BitmapImage BitmapVRAM
+        private Bitmap _BitmapVRAM;
+        public Bitmap BitmapVRAM
         {
             get { return _BitmapVRAM; }
             set
@@ -255,11 +268,14 @@ namespace Emulator.Player
 
         public void Update()
         {
-            UpdateRegisters();
-            UpdateFlags();
-            UpdateInterrupts();
-            UpdateVRam();
-            UpdateORam();
+            if(machine is not null)
+            {
+                UpdateRegisters();
+                UpdateFlags();
+                UpdateInterrupts();
+                //UpdateVRam();
+                //UpdateORam();
+            }
         }
 
         public string GetColor(bool value)
@@ -270,26 +286,69 @@ namespace Emulator.Player
 
         private void UpdateRegisters()
         {
+            A = machine.CPU.Registers.A.ToString("X2");
+            B = machine.CPU.Registers.B.ToString("X2");
+            C = machine.CPU.Registers.C.ToString("X2");
+            D = machine.CPU.Registers.D.ToString("X2");
+            E = machine.CPU.Registers.E.ToString("X2");
+            H = machine.CPU.Registers.H.ToString("X2");
+            L = machine.CPU.Registers.L.ToString("X2");
+            PC = machine.CPU.Registers.PC.Word.ToString("X4");
+            SP = machine.CPU.Registers.SP.ToString("X4");
         }
 
         private void UpdateFlags()
         {
-
+            Zero = GetColor(machine.CPU.Registers.ZeroFlag);
+            Substract = GetColor(machine.CPU.Registers.SubstractFlag);
+            Halt = GetColor(machine.CPU.Registers.HaltFlag);
+            Carry = GetColor(machine.CPU.Registers.CarryFlag);
         }
 
         private void UpdateInterrupts()
         {
-
+            IME = GetColor(machine.CPU.IME);
         }
 
+        #region ReadVRAM
+        // DGM color palette
+        private int[] color = new int[] { 0x00FFFFFF, 0x00808080, 0x00404040, 0 };
         private void UpdateVRam()
         {
+            var row = 0;
+            var column = 0;
+            for (ushort address = 0x9800; address < 0xA000; address += 8)
+            {
+                var lowTile = machine.Memory.Read(address);
+                var HighTile = machine.Memory.Read(address);
 
+                int colorBit = 7 - (1 & 7); //inversed
+                colorBit = GetColorIdBits(colorBit, lowTile, HighTile);
+            }
+            OnPropertyChanged(nameof(BitmapVRAM));
+        }
+        #endregion
+
+        private int GetColorIdBits(int colorBit, byte l, byte h)
+        {
+            int hi = (h >> colorBit) & 0x1;
+            int lo = (l >> colorBit) & 0x1;
+            return (hi << 1 | lo);
         }
 
         private void UpdateORam()
         {
+            OnPropertyChanged(nameof(BitmapORAM));
+        }
 
+        internal void Start()
+        {
+            Machine.RunGame();
+        }
+
+        internal void Stop()
+        {
+            throw new NotImplementedException();
         }
     }
 }
