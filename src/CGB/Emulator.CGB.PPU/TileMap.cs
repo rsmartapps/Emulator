@@ -1,20 +1,32 @@
 ﻿using Emulator.CGB.Memory;
 using Emulator.Domain.Tools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Emulator.CGB.PPU;
 
 internal class TileMap
 {
-    private PPUContenxt _context;
+    private ICGBMemoryBus _memory { get; }
 
-    public TileMap(PPUContenxt context)
+    public TileMap(ICGBMemoryBus memory)
     {
-        _context = context;
+        _memory = memory;
+    }
+
+    public void GetTile(ushort address)
+    {
+        /*
+         * The Game Boy contains two 32×32 tile maps in VRAM at the memory 
+         * areas $9800-$9BFF and $9C00-$9FFF. Any of these maps can be used 
+         * to display the Background or the Window.
+         */
+
+/*
+Block	VRAM Address        Corresponding      Tile    IDs
+                        Objects	    BG/Win if LCDC.4=1	    BG/Win if LCDC.4=0
+0	    $8000–$87FF	    0–127	    0–127	
+1	    $8800–$8FFF	    128–255	    128–255	                128–255 (or -128–-1)
+2	    $9000–$97FF	        (Can't use)	                    0–127
+*/
     }
 
 

@@ -2,6 +2,7 @@
 using Emulator.CGB.Memory.MBC;
 using Emulator.Domain;
 using Emulator.Domain.Tools;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Emulator.CGB.PPU;
 
@@ -22,6 +23,7 @@ public class PPUUnit : IPPU
 
     private ICGBMemoryBus _Memory { get; }
     private PPUContenxt _context;
+    private int _TCycles;
 
     public PPUUnit(ICGBMemoryBus memory)
     {
@@ -29,19 +31,13 @@ public class PPUUnit : IPPU
         _context = new PPUContenxt(memory);
     }
 
-    private LCDC _LCDC = new();
-    private STAT _STAT = new();
-    private int _TCycles;
 
     public void Update(int cycles)
     {
         _TCycles += cycles;
-        UpdateLCD();
-        UpdateSTAT();
-
-        if(_LCDC.On)
+        if(_context.On)
         {
-            switch (_STAT.Mode)
+            switch (_context.Mode)
             {
                 case LCDMode.HBlank:
                     UpdateHBlank();
@@ -52,7 +48,7 @@ public class PPUUnit : IPPU
                 case LCDMode.OAM:
                     UpdateOAM();
                     break;
-                case LCDMode.VRAM:
+                case LCDMode.Render:
                     UpdateVRam();
                     break;
             }
@@ -85,14 +81,14 @@ public class PPUUnit : IPPU
     {
         if (_TCycles >= SCANLINE_CYCLES)
         {
-            _STAT.LCDly++;
+            _context.LYCY++;
             _TCycles -= SCANLINE_CYCLES;
-            if (_STAT.LCDly == SCREEN_VBLANK_HEIGHT)
+            if (_context.LYCY == SCREEN_VBLANK_HEIGHT)
             {
                 changeSTATMode(2);
-                _STAT.LCDly = 0;
+                _context.LYCY = 0;
             }
-            _Memory.Write(STAT.LCD_LY, _STAT.LCDly);
+            _Memory.Write(PPUContenxt.LYC_Y, _context.LYCY);
         }
     }
 
@@ -100,10 +96,10 @@ public class PPUUnit : IPPU
     {
         if (_TCycles >= HBLANK_CYCLES)
         {
-            _STAT.LCDly++;
+            _context.LYCY++;
             _TCycles -= HBLANK_CYCLES;
 
-            if (_STAT.LCDy == SCREEN_HEIGHT)
+            if (_context.LCDY == SCREEN_HEIGHT)
             {
                 changeSTATMode(1);
                 requestInterrupt(VBLANK_INTERRUPT);
@@ -117,10 +113,9 @@ public class PPUUnit : IPPU
     }
     private void changeSTATMode(int mode)
     {
-        _STAT.StatusData = (byte)(_STAT.StatusData & ~0x3);
-        _Memory.Write(STAT.STATUS, _STAT.StatusData);
+        _context.StatusData = (byte)(_context.StatusData & ~0x3);
         //Accessing OAM - Mode 2 (80 cycles)
-        if (mode == 2 && BitOps.IsBit(_STAT.StatusData, 5))
+        if (mode == 2 && BitOps.IsBit(_context.StatusData, 5))
         { // Bit 5 - Mode 2 OAM Interrupt         (1=Enable) (Read/Write)
             requestInterrupt(LCD_INTERRUPT);
         }
@@ -128,13 +123,13 @@ public class PPUUnit : IPPU
         //case 3: //Accessing VRAM - Mode 3 (172 cycles) Total M2+M3 = 252 Cycles
 
         //HBLANK - Mode 0 (204 cycles) Total M2+M3+M0 = 456 Cycles
-        else if (mode == 0 && BitOps.IsBit(_STAT.StatusData, 3))
+        else if (mode == 0 && BitOps.IsBit(_context.StatusData, 3))
         { // Bit 3 - Mode 0 H-Blank Interrupt     (1=Enable) (Read/Write)
             requestInterrupt(LCD_INTERRUPT);
         }
 
         //VBLANK - Mode 1 (4560 cycles - 10 lines)
-        else if (mode == 1 && BitOps.IsBit(_STAT.StatusData, 4))
+        else if (mode == 1 && BitOps.IsBit(_context.StatusData, 4))
         { // Bit 4 - Mode 1 V-Blank Interrupt     (1=Enable) (Read/Write)
             requestInterrupt(LCD_INTERRUPT);
         }
@@ -144,45 +139,39 @@ public class PPUUnit : IPPU
 
     #region Rendering
 
-
+    /// <summary>
+    /// Prepare a full line the 32 tiles in internal memory
+    /// ready to be rendered
+    /// </summary>
     private void DrawScanLine()
     {
         throw new NotImplementedException();
     }
-
+    /// <summary>
+    /// Generates the bitmap to be seen in the screen
+    /// </summary>
     private void RenderFrame()
     {
+        
         throw new NotImplementedException();
     }
     #endregion
 
-    private void UpdateSTAT()
-    {
-        _STAT.StatusData = _Memory.Read(STAT.STATUS);
-        _STAT.LCDy = _Memory.Read(STAT.LCD_Y);
-        _STAT.LCDly = _Memory.Read(STAT.LCD_LY);
-    }
-
-    private void UpdateLCD()
-    {
-        _LCDC.data = _Memory.Read(LCDC.LCD);
-    }
-
     private void HandleCoincidence()
     {
-        if (_STAT.LCDy == _STAT.LCDly)
+        if (_context.LCDY == _context.LYCY)
         { //handle coincidence Flag
-            _STAT.StatusData = BitOps.bitSet(2, _STAT.StatusData);
-            if (BitOps.IsBit(_STAT.StatusData, 6))
+            _context.StatusData = BitOps.bitSet(2, _context.StatusData);
+            if (BitOps.IsBit(_context.StatusData, 6))
             {
                 requestInterrupt(LCD_INTERRUPT);
             }
         }
         else
         {
-            _STAT.StatusData = BitOps.bitClear(2, _STAT.StatusData);
+            _context.StatusData = BitOps.bitClear(2, _context.StatusData);
         }
-        _Memory.Write(STAT.STATUS, _STAT.StatusData);
+        _Memory.Write(PPUContenxt.STATUS, _context.StatusData);
     }
 
     private void requestInterrupt(byte b)
