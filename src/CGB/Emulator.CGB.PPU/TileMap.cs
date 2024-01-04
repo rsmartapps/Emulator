@@ -5,32 +5,16 @@ namespace Emulator.CGB.PPU;
 
 internal class TileMap
 {
+    private PPUContenxt _context;
     private ICGBMemoryBus _memory { get; }
 
-    public TileMap(ICGBMemoryBus memory)
+    public TileMap(ICGBMemoryBus memory, PPUContenxt context)
     {
         _memory = memory;
+        _context = context;
     }
-
-    public void GetTile(ushort address)
-    {
-        /*
-         * The Game Boy contains two 32×32 tile maps in VRAM at the memory 
-         * areas $9800-$9BFF and $9C00-$9FFF. Any of these maps can be used 
-         * to display the Background or the Window.
-         */
-
-/*
-Block	VRAM Address        Corresponding      Tile    IDs
-                        Objects	    BG/Win if LCDC.4=1	    BG/Win if LCDC.4=0
-0	    $8000–$87FF	    0–127	    0–127	
-1	    $8800–$8FFF	    128–255	    128–255	                128–255 (or -128–-1)
-2	    $9000–$97FF	        (Can't use)	                    0–127
-*/
-    }
-
-
 }
+
 /// <summary>
 /// Tile representing 8x8 pixels
 /// </summary>
@@ -58,6 +42,7 @@ internal class TileData
         }
     }
 }
+record Tile(int[,] Pixels);
 
 internal enum BGPalette
 {

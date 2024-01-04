@@ -14,13 +14,15 @@ public class BitOps
     {
         return (byte)(data);
     }
-    public static byte bitClear(int n, byte v)
+    public static byte bitClear(int value, byte bitPosition)
     {
-        return v &= (byte)~(1 << n);
+        bitPosition++;
+        return bitPosition &= (byte)~(1 << value);
     }
-    public static byte bitSet(byte n, byte v)
+    public static byte bitSet(byte value, byte bitPosition)
     {
-        return v |= (byte)(1 << n);
+        bitPosition++;
+        return bitPosition |= (byte)(1 << value);
     }
 
     public static byte GetBit(byte data, int index) => (byte)((data >> index) & 1);

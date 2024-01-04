@@ -12,10 +12,9 @@ public class PPUUnit : IPPU
     private const int SCREEN_HEIGHT = 144;
     private const int SCREEN_VBLANK_HEIGHT = 153;
 
-    private const int OAM_CYCLES = 80;
-    private const int VRAM_CYCLES = 172;
-    private const int HBLANK_CYCLES = 204;
-    private const int SCANLINE_CYCLES = 456;
+    private const int OAM_DOTS = 80;
+    private const int RENDER_DOTS = 172;
+    private const int SCANLINE_DOTS = 456;
 
     private const int VBLANK_INTERRUPT = 0;
     private const int LCD_INTERRUPT = 1;
@@ -24,6 +23,8 @@ public class PPUUnit : IPPU
     private ICGBMemoryBus _Memory { get; }
     private PPUContenxt _context;
     private int _TCycles;
+    //private Bitmap LCD;
+    public event EventHandler<BitmapArgs> LCDReceived;
 
     public PPUUnit(ICGBMemoryBus memory)
     {
@@ -32,24 +33,30 @@ public class PPUUnit : IPPU
     }
 
 
+    /// <summary>
+    /// Update the PPU
+    /// </summary>
     public void Update(int cycles)
     {
+        // moves 4 dots per cicle
+        // moves 2 dots per cicle double speed mode
+
         _TCycles += cycles;
-        if(_context.On)
+        if(_context.EnabledLCDPPU)
         {
             switch (_context.Mode)
             {
-                case LCDMode.HBlank:
-                    UpdateHBlank();
-                    break;
-                case LCDMode.VBlank:
-                    UpdateVBlank();
-                    break;
                 case LCDMode.OAM:
-                    UpdateOAM();
+                    ScanObjects();
                     break;
                 case LCDMode.Render:
-                    UpdateVRam();
+                    DrawPixels();
+                    break;
+                case LCDMode.HBlank:
+                    HorizontalBlank();
+                    break;
+                case LCDMode.VBlank:
+                    VerticalBlank();
                     break;
             }
             HandleCoincidence();
@@ -58,80 +65,99 @@ public class PPUUnit : IPPU
     }
 
     #region Mode execution
-    private void UpdateVRam()
+    /// <summary>
+    /// Update vram mode 3
+    /// </summary>
+    private void DrawPixels()
     {
-        if (_TCycles >= VRAM_CYCLES)
+        // 18 vertical tyles
+        // 20 horizontal tyles
+
+        if (_TCycles >= OAM_DOTS+RENDER_DOTS)
         {
-            changeSTATMode(0);
-            _TCycles -= VRAM_CYCLES;
+            // Reset X position
+            changeSTATMode(LCDMode.HBlank);
         }
+
+        // Add https://gbdev.io/pandocs/Rendering.html#mode-3-length
+        if (_context.BGWindowPriority && _context.LCDY == 0)
+        {
+            //Background scrolling: At the very beginning of Mode 3, rendering is paused for SCX % 8 dots while the same number of pixels are discarded from the leftmost tile.
+            //var skipDots = _context.SCX % 8;
+            //if(_TCycles < OAM_DOTS + skipDots)
+            //{
+            //    return;
+            //}
+        }
+        SendFrame();
     }
 
-    private void UpdateOAM()
+    /// <summary>
+    /// Update objects mode 2
+    /// </summary>
+    private void ScanObjects()
     {
-        if (_TCycles >= OAM_CYCLES)
+        if (_TCycles >= OAM_DOTS)
         {
-            changeSTATMode(3);
-            DrawScanLine();
-            _TCycles -= OAM_CYCLES;
+            changeSTATMode(LCDMode.Render);
+        }
+        else
+        {
+            // Every two dots scan 1 tile
+
         }
     }
-
-    private void UpdateVBlank()
+    /// <summary>
+    /// Update VBlank mode 1
+    /// </summary>
+    private void VerticalBlank()
     {
-        if (_TCycles >= SCANLINE_CYCLES)
+        if (_TCycles >= SCANLINE_DOTS)
         {
             _context.LYCY++;
-            _TCycles -= SCANLINE_CYCLES;
-            if (_context.LYCY == SCREEN_VBLANK_HEIGHT)
+            if (_context.LCDY == SCREEN_VBLANK_HEIGHT)
             {
-                changeSTATMode(2);
+                changeSTATMode(LCDMode.OAM);
                 _context.LYCY = 0;
+                _TCycles -= SCANLINE_DOTS;
             }
-            _Memory.Write(PPUContenxt.LYC_Y, _context.LYCY);
         }
     }
 
-    private void UpdateHBlank()
+    /// <summary>
+    /// Update HBlank mode 0
+    /// </summary>
+    private void HorizontalBlank()
     {
-        if (_TCycles >= HBLANK_CYCLES)
+        if (_TCycles >= SCANLINE_DOTS)
         {
-            _context.LYCY++;
-            _TCycles -= HBLANK_CYCLES;
-
-            if (_context.LCDY == SCREEN_HEIGHT)
+            increment_ly();
+            if(_context.LCDY >= SCREEN_HEIGHT)
             {
-                changeSTATMode(1);
+                changeSTATMode(LCDMode.VBlank);
                 requestInterrupt(VBLANK_INTERRUPT);
-                RenderFrame();
             }
             else
             {
-                changeSTATMode(2);
+                changeSTATMode(LCDMode.OAM);
             }
+            _TCycles -= SCANLINE_DOTS;
         }
     }
-    private void changeSTATMode(int mode)
+
+    private void changeSTATMode(LCDMode mode)
     {
-        _context.StatusData = (byte)(_context.StatusData & ~0x3);
-        //Accessing OAM - Mode 2 (80 cycles)
-        if (mode == 2 && BitOps.IsBit(_context.StatusData, 5))
-        { // Bit 5 - Mode 2 OAM Interrupt         (1=Enable) (Read/Write)
-            requestInterrupt(LCD_INTERRUPT);
-        }
-
-        //case 3: //Accessing VRAM - Mode 3 (172 cycles) Total M2+M3 = 252 Cycles
-
-        //HBLANK - Mode 0 (204 cycles) Total M2+M3+M0 = 456 Cycles
-        else if (mode == 0 && BitOps.IsBit(_context.StatusData, 3))
-        { // Bit 3 - Mode 0 H-Blank Interrupt     (1=Enable) (Read/Write)
-            requestInterrupt(LCD_INTERRUPT);
-        }
-
-        //VBLANK - Mode 1 (4560 cycles - 10 lines)
-        else if (mode == 1 && BitOps.IsBit(_context.StatusData, 4))
-        { // Bit 4 - Mode 1 V-Blank Interrupt     (1=Enable) (Read/Write)
-            requestInterrupt(LCD_INTERRUPT);
+        _context.Mode = mode;
+        var interrupt = (mode) switch
+        {
+            (LCDMode.HBlank) => BitOps.IsBit(_context.StatusData, 3) ? LCD_INTERRUPT : -1,
+            (LCDMode.OAM) => BitOps.IsBit(_context.StatusData, 5) ? LCD_INTERRUPT : -1,
+            (LCDMode.VBlank) => BitOps.IsBit(_context.StatusData, 4) ? LCD_INTERRUPT : -1,
+            (_) =>-1
+        };
+        if(interrupt > 0)
+        {
+            requestInterrupt((byte)interrupt);
         }
 
     }
@@ -140,23 +166,28 @@ public class PPUUnit : IPPU
     #region Rendering
 
     /// <summary>
-    /// Prepare a full line the 32 tiles in internal memory
-    /// ready to be rendered
+    /// Draws each pixel for the given line _context.LCDY and the 32 tiles, each tile has 8 pixels and the pixel is set to bitmap
+    /// The color is pick by the method GetColor() that returns an int
     /// </summary>
     private void DrawScanLine()
     {
-        throw new NotImplementedException();
+        for(int i = 0; i< 32;i++)
+        {
+
+        }
     }
+
     /// <summary>
     /// Generates the bitmap to be seen in the screen
     /// </summary>
-    private void RenderFrame()
+    private void SendFrame()
     {
-        
-        throw new NotImplementedException();
+        LCDReceived?.Invoke(this, new BitmapArgs(null));
     }
     #endregion
-
+    /// <summary>
+    /// Handles coincidence
+    /// </summary>
     private void HandleCoincidence()
     {
         if (_context.LCDY == _context.LYCY)
@@ -169,15 +200,53 @@ public class PPUUnit : IPPU
         }
         else
         {
-            _context.StatusData = BitOps.bitClear(2, _context.StatusData);
+            _context.StatusData = BitOps.bitClear(_context.StatusData, 0);
         }
         _Memory.Write(PPUContenxt.STATUS, _context.StatusData);
     }
 
+    /// <summary>
+    /// Handles the coincidence interrupt.
+     /// </summary>
     private void requestInterrupt(byte b)
     {
         var IF = _Memory.Read(0xFF0F);
-        IF = BitOps.bitSet(b, IF);
+        IF = BitOps.bitSet(IF,b);
         _Memory.Write(0xFF0F, IF);
+    }
+
+    private void increment_ly()
+    {
+        _context.LYCY++;
+
+        if (_context.LCDY == _context.LYCY)
+        {
+            _context.StatusData = BitOps.bitSet(_context.StatusData,7);
+
+            if (BitOps.IsBit(_context.StatusData,2))
+            {
+                requestInterrupt(LCD_INTERRUPT);
+            }
+        }
+        else
+        {
+            _context.StatusData = BitOps.bitClear(_context.StatusData, 7);
+        }
+    }
+}
+
+internal enum RenderMode
+{
+    RenderBackGround,
+    RenderWindow,
+    RenderSprites
+}
+
+public class BitmapArgs : EventArgs
+{
+    public readonly object Image;
+    public BitmapArgs(object image)
+    {
+        Image = image;
     }
 }

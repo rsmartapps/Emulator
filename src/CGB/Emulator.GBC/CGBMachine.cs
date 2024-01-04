@@ -52,6 +52,7 @@ internal class CGBMachine : IMachine
     private void ExecuteGame()
     {
         CPU.ProcessOperation();
+        PPU.Update(4);
     }
 
     public void StopGame()
