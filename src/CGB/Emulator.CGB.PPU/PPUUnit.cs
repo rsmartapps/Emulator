@@ -2,6 +2,7 @@
 using Emulator.CGB.Memory.MBC;
 using Emulator.Domain;
 using Emulator.Domain.Tools;
+using System.Drawing;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Emulator.CGB.PPU;
@@ -196,14 +197,36 @@ public class PPUUnit : IPPU
 
     private void DrawTile(ref long[,] screen, ushort baseAddress, int x, int y)
     {
-        var tileNum = x * y;
-        if(tileNum == 0) { tileNum = x + y; }
+        var tileY = y / 8;
+        var tileX = x / 8;
+        var tileOffset = (tileY == 0) ? (tileX*2): (tileY * tileX * 2) + 32;
+
+        var a = _Memory.Read((ushort)(baseAddress + tileOffset));
+        var b = _Memory.Read((ushort)(baseAddress + tileOffset + 1));
+        SetColor(b,a);
     }
 
-    /// <summary>
-    /// Generates the bitmap to be seen in the screen
-    /// </summary>
-    private void SendFrame()
+    private void SetColor(byte right, byte left)
+    {
+        BGPalette[,] TileColorMap = new BGPalette[8, 8];
+
+        var row = 0;
+        for (int pointer = 0; pointer< 16; pointer += 2)
+        {
+            for (int bitPosition = 7; bitPosition >= 0; bitPosition--)
+            {
+                TileColorMap[row, 7 - bitPosition] = (BGPalette)BitOps.JoinBits(right, left, bitPosition);
+            }
+            row++;
+        }
+
+    
+    }
+
+/// <summary>
+/// Generates the bitmap to be seen in the screen
+/// </summary>
+private void SendFrame()
     {
         Frame?.Invoke(this, new BitmapArgs(Screen));
         DebugFrame?.Invoke(this, new BitmapArgs(DebugScreen));
