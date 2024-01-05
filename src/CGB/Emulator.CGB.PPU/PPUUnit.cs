@@ -23,8 +23,10 @@ public class PPUUnit : IPPU
     private ICGBMemoryBus _Memory { get; }
     private PPUContenxt _context;
     private int _TCycles;
-    //private Bitmap LCD;
-    public event EventHandler<BitmapArgs> LCDReceived;
+    private long[,] Screen = new long[160,144];
+    private long[,] DebugScreen = new long[255,510];
+    public event EventHandler<BitmapArgs> Frame;
+    public event EventHandler<BitmapArgs> DebugFrame;
 
     public PPUUnit(ICGBMemoryBus memory)
     {
@@ -72,6 +74,7 @@ public class PPUUnit : IPPU
     {
         // 18 vertical tyles
         // 20 horizontal tyles
+        DrawScanLine();
 
         if (_TCycles >= OAM_DOTS+RENDER_DOTS)
         {
@@ -171,10 +174,30 @@ public class PPUUnit : IPPU
     /// </summary>
     private void DrawScanLine()
     {
-        for(int i = 0; i< 32;i++)
+        if (DebugFrame != null)
         {
-
+            DrawScanLineDebug();
         }
+    }
+
+    private void DrawScanLineDebug()
+    {
+        var row = _context.LCDY;
+        // Background Map
+        const ushort backgroundBaseAdrress = 0x8000;
+        for (int y= row; y<=255; y+=8) 
+        {
+            for(int x=0; x<=255; x+=8)
+            {
+                DrawTile(ref DebugScreen, backgroundBaseAdrress, x, y);
+            }
+        }
+    }
+
+    private void DrawTile(ref long[,] screen, ushort baseAddress, int x, int y)
+    {
+        var tileNum = x * y;
+        if(tileNum == 0) { tileNum = x + y; }
     }
 
     /// <summary>
@@ -182,7 +205,8 @@ public class PPUUnit : IPPU
     /// </summary>
     private void SendFrame()
     {
-        LCDReceived?.Invoke(this, new BitmapArgs(null));
+        Frame?.Invoke(this, new BitmapArgs(Screen));
+        DebugFrame?.Invoke(this, new BitmapArgs(DebugScreen));
     }
     #endregion
     /// <summary>
@@ -244,8 +268,8 @@ internal enum RenderMode
 
 public class BitmapArgs : EventArgs
 {
-    public readonly object Image;
-    public BitmapArgs(object image)
+    public readonly long[,] Image;
+    public BitmapArgs(long[,] image)
     {
         Image = image;
     }

@@ -13,13 +13,21 @@ namespace Emulator.CGB.CPU
         public ICGBMemoryBus Ram { get; private set; }
 
         private int _cylcleCounter = 0;
-        public bool IME;
+        public bool IME
+        {
+            get { return Registers.IME; }
+            set { Registers.IME = value; }
+        }
         public byte IE
         {
-            get { return LD8(0xFFFF); }
-            set { LD8(0xFFFF, value); }
+            get { return Ram.Read(0xFFFF); }
+            set { Ram.Write(0xFFFF, value); }
         }
-        public byte IF = 0;
+        public byte IF
+        {
+            get { return Ram.Read(0xFF0F); }
+            set { Ram.Write(0xFF0F, value); }
+        }
         public bool HALTED = false;
         public bool HALT_BUG = false;
 
@@ -32,7 +40,7 @@ namespace Emulator.CGB.CPU
 
         public int ProcessOperation()
         {
-            ProcessInterrupts();
+            _cylcleCounter = 0;
 
             if (HALT_BUG)
             {
@@ -46,9 +54,8 @@ namespace Emulator.CGB.CPU
             return _cylcleCounter;
         }
 
-        private void ProcessInterrupts()
+        public void ProcessInterrupts()
         {
-            bool updateIF = false;
             if (HALTED)
             {
                 Registers.PC++;
@@ -56,23 +63,20 @@ namespace Emulator.CGB.CPU
             }
             if (IME)
             {
-                IE = Ram.Read(ADDRESS_IE);
-                IF = Ram.Read(ADDRESS_IF);
                 for (int interrupt = 0; interrupt < 5; interrupt++)
                 {
                     if ((((IE & IF) >> interrupt) & 0x1) == 1)
                     {
-                        PUSH(Registers.PC.High, Registers.PC.Low);
+                        Registers.SP--;
+                        Ram.Write(Registers.SP, Registers.PC.High);
+                        Registers.SP--;
+                        Ram.Write(Registers.SP, Registers.PC.Low);
                         Registers.PC.Word = (ushort)(0x40 + (8 * interrupt));
-                        IF = BitOps.bitClear(interrupt, IF);
+                        IF = BitOps.bitClear(IF, (byte)interrupt);
                         IME = false;
-                        goto EXIT;
+                        _cylcleCounter += 5;
+                        return;
                     }
-                }
-            EXIT:
-                if (updateIF)
-                {
-                    Ram.Write(ADDRESS_IF, IF);
                 }
             }
         }
@@ -336,7 +340,7 @@ namespace Emulator.CGB.CPU
                     Registers.CarryFlag = c;
                     break; // POP AF . 1 12 . Z N H C
                 case 0xF2: Registers.A = LDHA8(Registers.C); break; // LD A,(C) . 2 8 . - - - -
-                case 0xF3: IME = false; _cylcleCounter += 4; break; // DI . 1 4 . - - - -
+                case 0xF3: DI(); break; // DI . 1 4 . - - - -
                                                //case 0xF4: break;
                 case 0xF5: PUSH(Registers.AF.High, Registers.AF.Low); break; // PUSH AF . 1 16 . - - - -
                 case 0xF6: OR(LD8(Registers.PC.Word)); Registers.PC++; _cylcleCounter -= 4; break; // OR d8 . 2 8 . Z 0 0 0
@@ -623,7 +627,7 @@ namespace Emulator.CGB.CPU
         public virtual void EI()
         {
             _cylcleCounter += 8;
-            IME |= IME;
+            IME = true;
         }
         public virtual void HALT()
         {
@@ -798,8 +802,7 @@ namespace Emulator.CGB.CPU
         }
         public virtual byte LD8(ushort address) {  _cylcleCounter += 8; return Ram.Read(address); }
         public virtual void LD8(ushort address, byte value) { Ram.Write(address, value); _cylcleCounter += 8; }
-        public virtual void LDP8(ushort address, byte value) => Ram.Write(LD8(address), value);
-        public virtual byte LDHP8(ushort address) { _cylcleCounter -= 4; return LD8((ushort)(0xFF00 + LD8((address)))); }
+        public virtual byte LDHP8(ushort address) { _cylcleCounter -= 4; return LD8((ushort)(0xFF00 + LD8(address))); }
         public virtual void LDH8(ushort address, byte value) => LD8((ushort)(0xFF00 + address), value);
         public virtual void LDHA8(ushort address, byte value) { LD8((ushort)(0xFF00 + LD8(address)), value); _cylcleCounter -= 4; }
         public virtual byte LDHA8(ushort address) => LD8((ushort)(0xFF00 + address));
@@ -1240,7 +1243,9 @@ namespace Emulator.CGB.CPU
         }
         public virtual void DI()
         {
-            Registers.Interrupt = false;
+            Registers.IME = false;
+            _cylcleCounter += 4;
+
         }
 
         public virtual void RST(byte OPCode)
@@ -1321,10 +1326,10 @@ namespace Emulator.CGB.CPU
 
         public override string ToString()
         {
-            var pc = LD8((ushort)(Registers.PC.Word)).ToString("X2");
-            var pc1 = LD8((ushort)(Registers.PC.Word + 1)).ToString("X2");
-            var pc2 = LD8((ushort)(Registers.PC.Word + 2)).ToString("X2");
-            var pc3 = LD8((ushort)(Registers.PC.Word + 3)).ToString("X2");
+            var pc = Ram.Read((ushort)(Registers.PC.Word)).ToString("X2");
+            var pc1 = Ram.Read((ushort)(Registers.PC.Word + 1)).ToString("X2");
+            var pc2 = Ram.Read((ushort)(Registers.PC.Word + 2)).ToString("X2");
+            var pc3 = Ram.Read((ushort)(Registers.PC.Word + 3)).ToString("X2");
             return $"A: {Registers.A.ToString("X2")} F: {Registers.F.ToString("X2")} B: {Registers.B.ToString("X2")} C: {Registers.C.ToString("X2")} D: {Registers.D.ToString("X2")} E: {Registers.E.ToString("X2")} H: {Registers.H.ToString("X2")} L: {Registers.L.ToString("X2")} SP: {Registers.SP.ToString("X2")} PC: {Registers.PC.Word.ToString("X4")} ({pc} {pc1} {pc2} {pc3})";
         }
 

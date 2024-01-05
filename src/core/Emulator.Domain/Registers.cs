@@ -45,10 +45,6 @@ namespace Emulator.Domain
         /// - - - C
         /// </summary>
         public bool CarryFlag { get { return (F & 0x10) != 0; } set { F = value ? (byte)(F | 0x10) : (byte)(F & ~0x10); } }
-        /// <summary>
-        /// 0, not used always Zero 
-        /// </summary>
-        public bool Interrupt { get; set; }
 
         public Register AF { get; set; } = new();
         public Register BC { get; set; } = new();
@@ -61,7 +57,7 @@ namespace Emulator.Domain
 
         public override string ToString()
         {
-            return $"AF({AF})BC({BC})DE({DE})HL({HL})SP({SP})PC({PC})-Z:{ZeroFlag}-N{SubstractFlag}-H{HaltFlag}-C{CarryFlag}-I{Interrupt}";
+            return $"AF({AF})BC({BC})DE({DE})HL({HL})SP({SP})PC({PC})-Z:{ZeroFlag}-N{SubstractFlag}-H{HaltFlag}-C{CarryFlag}-I{IME}";
         }
     }
 }

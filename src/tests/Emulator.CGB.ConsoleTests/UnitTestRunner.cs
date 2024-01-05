@@ -21,7 +21,8 @@ internal static class UnitTestRunner
             {
                 try
                 {
-                    RunTest(item);
+                    var expectedCycles = ((JsonElement)item.cycles[0][0]).Deserialize<int>();
+                    var opCycles = RunTest(item);
                     ok++;
                 }
                 catch (Exception ex)
@@ -38,13 +39,15 @@ internal static class UnitTestRunner
         Console.WriteLine($"Time {sw.Elapsed}");
         Console.WriteLine($"Total OPCodes Failed {totalOPCodesFailed}");
     }
-    static void RunTest(UnitTest test)
+    static int RunTest(UnitTest test)
     {
         var ram = new MBCMock();
         var gbcpu = new CGBCPU(ram);
         Common.InitializeCPU(gbcpu, test.initial);
-        gbcpu.ProcessOperation();
+        var cycles =gbcpu.ProcessOperation();
         var actual = Common.GetCPUAsFinal(gbcpu);
+        
         Assert.Equivalent(test.final, actual);
+        return cycles;
     }
 }
